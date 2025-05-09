@@ -1,0 +1,5 @@
+{
+  "vroomUrl": "http://sucolo-vroom-vroom-1.rancher.internal:3000",
+  "mapboxToken": "pk.eyJ1IjoiYmdhdW5pdHoiLCJhIjoiY202OWZ5ajQ0MDhydTJqcjlmN3diYmxvbyJ9.cF-cYArrFzUSc-ab5ouXQw",
+  "commitHash": "LOCAL-DEV"
+}

@@ -1,0 +1,124 @@
+<div class="w-screen h-screen flex">
+  <div class="flex-1 w-3/4">
+    <div id="mapOverlay">
+      <button (click)="onScenario1Click($event)" class="map-overlay-box">
+        <p>Scenario 1</p>
+        <p>Pick-Up and Delivery</p>
+      </button>
+      <button (click)="onScenario2Click($event)" class="map-overlay-box">
+        <p>Scenario 2</p>
+        <p>Delivery from Depot only</p>
+      </button>
+      <button (click)="onScenario3Click($event)" class="map-overlay-box">
+        <p>Scenario 3</p>
+        <p>Delivery from Depot only (Limited Capacity: 4)</p>
+      </button>
+      <button (click)="onScenario4Click($event)" class="map-overlay-box">
+        <p>Scenario 4</p>
+        <p>Delivery from Luetzschena Depot (Limited Capacity: 2)</p>
+      </button>
+      <label class="map-overlay-box inline-flex items-center space-x-2 cursor-pointer">
+        <input type="checkbox" [(ngModel)]="matchStreets" (change)="onMatchStreetsChanged($event)">
+        <span>Match streets</span>
+      </label>
+    </div>
+    <div id="mapOverlayAddVehicles" class="flex space-x-4">
+      @for (vehicle of vehicles; track vehicle.id; let index = $index) {
+        <div class="map-overlay-box">
+          <p>ID: {{ vehicle.id }}</p>
+          <img [src]="getImageSrcForVehicle(vehicle)"/>
+          <button (click)="onVehicleRemove(vehicle)" class="map-overlay-box w-32">Remove</button>
+        </div>
+      }
+      <div class="flex flex-col items-center justify-center space-y-4">
+        <button (click)="onVehicleAdd('bike')" class="map-overlay-box w-32">Add Bike</button>
+        <button (click)="onVehicleAdd('car')" class="map-overlay-box w-32">Add Truck</button>
+      </div>
+    </div>
+    <div id="mapOverlayRoutes" class="flex">
+      @for (route of routes; track route; let index = $index) {
+        <button (click)="onRouteClicked(route)" class="map-overlay-box">
+          <p>Route {{ route.vehicle }}</p>
+          <p>{{ RouteUtil.durationAsString(route.getTotalDuration()) }}h</p>
+          <img [src]="getImageSrcForVehicle(getVehicleById(route.vehicle))"/>
+        </button>
+      }
+    </div>
+
+    <mgl-map
+      #map
+      [style]="'mapbox://styles/mapbox/dark-v11'"
+      [zoom]="[12]"
+      [center]="[12.312756,51.357954]"
+      (mapClick)="onMapClick($event)"
+      (mapLoad)="onMapReady($event)"
+    >
+
+      <mgl-geojson-source
+        id="buildings"
+        [data]="buildingGeojson"
+      >
+      </mgl-geojson-source>
+
+      <mgl-layer
+        id="buildingsLayer"
+        type="fill-extrusion"
+        source="buildings"
+        [paint]="buildingLayerStyle.paint3d"
+      >
+      </mgl-layer>
+
+      <mgl-layer
+        id="lineArrowLayer"
+        type="symbol"
+        source="polyline"
+        [layout]="{
+          'icon-image': 'triangle',
+          'symbol-placement': 'line',
+          'icon-size': 0.7
+        }"
+        [paint]="{
+          'icon-color' : '#d1d1d1',
+          'icon-opacity' : 0.8
+        }"
+      >
+      </mgl-layer>
+
+      <mgl-geojson-source
+        id="polyline"
+        [data]="polylineData"
+        [lineMetrics]="true"
+      >
+      </mgl-geojson-source>
+
+      <mgl-layer
+        id="trackline"
+        type="line"
+        source="polyline"
+        [paint]="polylineLayerStyle.paint"
+        [layout]="{
+                'line-cap': 'round',
+                'line-join': 'round',
+            }"
+      >
+      </mgl-layer>
+
+      <mgl-geojson-source
+        id="points"
+        [data]="polylinePoints"
+      >
+      </mgl-geojson-source>
+
+      <mgl-layer
+        id="pointLayer"
+        type="symbol"
+        source="points"
+        [layout]="pointLayerStyle.layout"
+        [paint]="pointLayerStyle.paint"
+      >
+      </mgl-layer>
+
+    </mgl-map>
+  </div>
+  <app-route-details *ngIf="route" class="w-1/4 overflow-y-auto" [route]="route"/>
+</div>

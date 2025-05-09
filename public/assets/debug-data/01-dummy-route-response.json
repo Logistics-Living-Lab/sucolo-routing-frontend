@@ -1,0 +1,416 @@
+{
+  "code": 0,
+  "summary": {
+    "cost": 10050,
+    "routes": 1,
+    "unassigned": 0,
+    "setup": 0,
+    "service": 2400,
+    "duration": 10050,
+    "waiting_time": 0,
+    "priority": 0,
+    "distance": 26113,
+    "violations": [],
+    "computing_times": {
+      "loading": 968,
+      "solving": 4,
+      "routing": 8
+    }
+  },
+  "unassigned": [],
+  "routes": [
+    {
+      "vehicle": 1,
+      "cost": 10050,
+      "setup": 0,
+      "service": 2400,
+      "duration": 10050,
+      "waiting_time": 0,
+      "priority": 0,
+      "distance": 26113,
+      "steps": [
+        {
+          "type": "start",
+          "location": [
+            12.411117553710938,
+            51.35988383834183
+          ],
+          "setup": 0,
+          "service": 0,
+          "waiting_time": 0,
+          "arrival": 0,
+          "duration": 0,
+          "violations": [],
+          "distance": 0
+        },
+        {
+          "type": "pickup",
+          "description": "Fritz-Simonis-Straße 23, 04159 Leipzig ",
+          "location": [
+            12.337483260000004,
+            51.37355282000001
+          ],
+          "id": 1,
+          "setup": 0,
+          "service": 60,
+          "waiting_time": 0,
+          "job": 1,
+          "arrival": 2713,
+          "duration": 2713,
+          "violations": [],
+          "distance": 7344
+        },
+        {
+          "type": "pickup",
+          "description": "Hans-Beimler-Straße 36, 04159 Leipzig ",
+          "location": [
+            12.3343307,
+            51.373254555555555
+          ],
+          "id": 2,
+          "setup": 0,
+          "service": 60,
+          "waiting_time": 0,
+          "job": 2,
+          "arrival": 2956,
+          "duration": 2896,
+          "violations": [],
+          "distance": 7665
+        },
+        {
+          "type": "delivery",
+          "description": "Christoph-Probst-Straße 19, 04159 Leipzig ",
+          "location": [
+            12.33479913076923,
+            51.373523515384626
+          ],
+          "id": 2,
+          "setup": 0,
+          "service": 0,
+          "waiting_time": 0,
+          "job": 2,
+          "arrival": 3055,
+          "duration": 2935,
+          "violations": [],
+          "distance": 7706
+        },
+        {
+          "type": "pickup",
+          "description": "Georg-Schumann-Straße 305, 04159 Leipzig ",
+          "location": [
+            12.331350125,
+            51.371690062499994
+          ],
+          "id": 7,
+          "setup": 0,
+          "service": 60,
+          "waiting_time": 0,
+          "job": 7,
+          "arrival": 3305,
+          "duration": 3185,
+          "violations": [],
+          "distance": 8202
+        },
+        {
+          "type": "pickup",
+          "description": "Hendelweg 8, 04159 Leipzig ",
+          "location": [
+            12.320786900000002,
+            51.371796
+          ],
+          "id": 4,
+          "setup": 0,
+          "service": 60,
+          "waiting_time": 0,
+          "job": 4,
+          "arrival": 3753,
+          "duration": 3573,
+          "violations": [],
+          "distance": 9174
+        },
+        {
+          "type": "pickup",
+          "description": "Am Meilenstein 12, 04159 Leipzig ",
+          "location": [
+            12.321984075,
+            51.3760854125
+          ],
+          "id": 3,
+          "setup": 0,
+          "service": 60,
+          "waiting_time": 0,
+          "job": 3,
+          "arrival": 4167,
+          "duration": 3927,
+          "violations": [],
+          "distance": 9814
+        },
+        {
+          "type": "pickup",
+          "description": "Pater-Gordian-Straße 34, 04159 Leipzig ",
+          "location": [
+            12.32049536923077,
+            51.382036061538464
+          ],
+          "id": 8,
+          "setup": 0,
+          "service": 60,
+          "waiting_time": 0,
+          "job": 8,
+          "arrival": 4673,
+          "duration": 4373,
+          "violations": [],
+          "distance": 10734
+        },
+        {
+          "type": "delivery",
+          "description": "Koloniestraße 3, 04159 Leipzig ",
+          "location": [
+            12.316729666666664,
+            51.38418551666667
+          ],
+          "id": 1,
+          "setup": 0,
+          "service": 0,
+          "waiting_time": 0,
+          "job": 1,
+          "arrival": 4958,
+          "duration": 4598,
+          "violations": [],
+          "distance": 11201
+        },
+        {
+          "type": "delivery",
+          "description": "Freirodaer Weg 1, 04159 Leipzig ",
+          "location": [
+            12.27326025,
+            51.38478205
+          ],
+          "id": 4,
+          "setup": 0,
+          "service": 0,
+          "waiting_time": 0,
+          "job": 4,
+          "arrival": 6413,
+          "duration": 6053,
+          "violations": [],
+          "distance": 15321
+        },
+        {
+          "type": "pickup",
+          "description": "Elstergarten 4, 04159 Leipzig ",
+          "location": [
+            12.26934405,
+            51.384776075000005
+          ],
+          "id": 5,
+          "setup": 0,
+          "service": 60,
+          "waiting_time": 0,
+          "job": 5,
+          "arrival": 6500,
+          "duration": 6140,
+          "violations": [],
+          "distance": 15594
+        },
+        {
+          "type": "pickup",
+          "description": "Hallesche Straße 195, 04159 Leipzig ",
+          "location": [
+            12.265205925,
+            51.38506195000001
+          ],
+          "id": 6,
+          "setup": 0,
+          "service": 60,
+          "waiting_time": 0,
+          "job": 6,
+          "arrival": 6647,
+          "duration": 6227,
+          "violations": [],
+          "distance": 15884
+        },
+        {
+          "type": "delivery",
+          "description": "Dorettenring 8, 04159 Leipzig ",
+          "location": [
+            12.27731625,
+            51.3801285
+          ],
+          "id": 3,
+          "setup": 0,
+          "service": 0,
+          "waiting_time": 0,
+          "job": 3,
+          "arrival": 7086,
+          "duration": 6606,
+          "violations": [],
+          "distance": 17064
+        },
+        {
+          "type": "pickup",
+          "description": "Hohle Gasse 11, 04159 Leipzig ",
+          "location": [
+            12.27694756,
+            51.38169156
+          ],
+          "id": 0,
+          "setup": 0,
+          "service": 60,
+          "waiting_time": 0,
+          "job": 0,
+          "arrival": 7250,
+          "duration": 6770,
+          "violations": [],
+          "distance": 17438
+        },
+        {
+          "type": "delivery",
+          "description": "Am Russischen Garten 15, 04159 Leipzig ",
+          "location": [
+            12.2833718,
+            51.3802316
+          ],
+          "id": 7,
+          "setup": 0,
+          "service": 0,
+          "waiting_time": 0,
+          "job": 7,
+          "arrival": 7478,
+          "duration": 6938,
+          "violations": [],
+          "distance": 17969
+        },
+        {
+          "type": "pickup",
+          "description": "Am Hohlweg 4, 04159 Leipzig ",
+          "location": [
+            12.305911825,
+            51.380873675
+          ],
+          "id": 9,
+          "setup": 0,
+          "service": 60,
+          "waiting_time": 0,
+          "job": 9,
+          "arrival": 8261,
+          "duration": 7721,
+          "violations": [],
+          "distance": 20377
+        },
+        {
+          "type": "delivery",
+          "description": "Stahmelner Höhe 22, 04159 Leipzig ",
+          "location": [
+            12.30518515,
+            51.3820521
+          ],
+          "id": 0,
+          "setup": 0,
+          "service": 0,
+          "waiting_time": 0,
+          "job": 0,
+          "arrival": 8415,
+          "duration": 7815,
+          "violations": [],
+          "distance": 20632
+        },
+        {
+          "type": "delivery",
+          "description": "Gregoriusstraße 4, 04159 Leipzig ",
+          "location": [
+            12.316138585714286,
+            51.37534287142857
+          ],
+          "id": 6,
+          "setup": 0,
+          "service": 0,
+          "waiting_time": 0,
+          "job": 6,
+          "arrival": 8972,
+          "duration": 8372,
+          "violations": [],
+          "distance": 22093
+        },
+        {
+          "type": "delivery",
+          "description": "Elsterblick 37, 04159 Leipzig ",
+          "location": [
+            12.344382885714284,
+            51.36581588571429
+          ],
+          "id": 5,
+          "setup": 0,
+          "service": 0,
+          "waiting_time": 0,
+          "job": 5,
+          "arrival": 9972,
+          "duration": 9372,
+          "violations": [],
+          "distance": 24687
+        },
+        {
+          "type": "delivery",
+          "description": "Laubestraße 9, 04159 Leipzig ",
+          "location": [
+            12.35047869090909,
+            51.36477742727273
+          ],
+          "id": 9,
+          "setup": 0,
+          "service": 0,
+          "waiting_time": 0,
+          "job": 9,
+          "arrival": 10263,
+          "duration": 9663,
+          "violations": [],
+          "distance": 25401
+        },
+        {
+          "type": "delivery",
+          "description": "Clausewitzstraße 23, 04159 Leipzig ",
+          "location": [
+            12.348116483333332,
+            51.36983298333334
+          ],
+          "id": 8,
+          "setup": 0,
+          "service": 0,
+          "waiting_time": 0,
+          "job": 8,
+          "arrival": 10650,
+          "duration": 10050,
+          "violations": [],
+          "distance": 26113
+        },
+        {
+          "type": "break",
+          "id": 1,
+          "setup": 0,
+          "service": 1800,
+          "waiting_time": 0,
+          "arrival": 10650,
+          "duration": 10050,
+          "violations": [],
+          "distance": 26113
+        },
+        {
+          "type": "end",
+          "location": [
+            12.348116483333332,
+            51.36983298333334
+          ],
+          "setup": 0,
+          "service": 0,
+          "waiting_time": 0,
+          "arrival": 12450,
+          "duration": 10050,
+          "violations": [],
+          "distance": 26113
+        }
+      ],
+      "violations": [],
+      "geometry": "ifnxHa`wjAb@BB?A\\@@J?XDTFR@VBH?PnBVnBFj@ChBItBC^MZDNFXDNDTBLDPFNDFBB@@LD??b@DLBNBRFFBH@JFFB@?RLZPTJr@XTHA^Ch@En@?HEj@AZCn@Ej@FLAh@IpA?dANXFFj@TVB`@C`APd@p@lBnDz@|AZb@v@jA`@h@TVpKzL@BFFBDAF_@bAEJ[dAYr@ELg@nA{@|B?T@H@Z@J@F@JLThDrEpA|A~@dARRTPp@\\DBFF@F@HAP?DANARAJGh@[zCI\\?DA@@BDFBDBD?BAHAHAR?JEf@Cj@ARCRE`B?`@AX?N?fAAx@A^E`@If@Mf@y@pCKXIP[\\]JSBM@WE]SATCZA?IFIF??C@IFbAtE@FJb@`@jBVhAxAxGHXFZSVMPCFCF??q@bBENm@~AM\\Ob@]~@KVCP?PCbCApBAzB?dBA\\CnFKvAAnA@H@JFP@L?F?L@P@X?HBt@@p@FhDBj@@f@@\\D~BB~@?BMFIFMNmAzAqBnCy@hAQTMPEFGFcB|BwBtCg@j@aBzAC@A@s@n@MJWTMLOHQDw@PIBGBIFIFMJKNOTKPINQXSTCDEDCBE@C@E@E?C?EAADKf@Mr@Ot@I`@AFe@fCMl@GXG^CLETMt@SfAMr@CLAFg@pB]`AWz@_@nBOt@CPADGh@?DAFCLCHCHMd@Od@a@fACHM^I^k@tCGZAFKl@GXAFI`@_@rBId@GZMt@AHETCHGZI`@Q~@MhA]~CCRQxAW`CCLAB[jASt@EJIVYp@[p@CBsBnEQd@c@zB[bBI`@?BKb@Od@K^Md@c@pACJEL_@pAiAxDY`AEJELOCoFeAA?KAAAC?A?CAC?EAIAEAwGmAMCMAsB[EAIACHENEPOv@IVgBhHKn@CPCd@ATQpDCX?DCXKj@_BvGAFOj@K`@w@`DCLADIn@CRGz@C`@AVCXE^G^ERETCHCJELu@~Be@|AIRc@vAs@~Bo@rBGTMMi@e@oAeAOOw@u@IICJI\\CLI`@I`@DDEEK`@I`@I`@SdA`@H`ATF@ZJp@ZGj@Eb@E`@Gd@Eb@E^CRCFENANK~@AVAJDBEC@KKCC?CCEGM[?I?HLZDFBBB?JB@WJ_A@Op@PPDCXk@jHCLMbB?@AX?d@B`@Hb@L^JPLNFHHDp@ThBb@VF@@DO@?LLLi@Mh@MMA?ENg@lB]xAYfAMf@GRSv@Sz@Qr@Oj@@@FDHHbBtAJHEJAJc@bBId@CTE^CXANOvAQrBCTADARAFEd@Ed@MrAEXAb@IbBCt@AJKtC?DCh@ZBr@HHBDNDPB\\BJBh@Dl@Df@Dl@FCFCHALCFCLO@?DCHAFBDFNX@@JPFFD@F@AN@OGAEAGGKQAAOYEGGCI@EBA?MNGBMBI@GBGBEm@Eg@Em@Ci@CKC]EQEOICs@I[COAi@E]CWCiBMGAE?g@EIAWAE?AAa@CC?ANG`@AJa@xDA?OE@ME?AAeD_AoCw@ECACANKCZkD?G@G?MSA??mB[_@Ia@GwB_@QCUEo@KMA_AQKAEA]ESEGAA?EAOCYE_ASUCUEGAI@IDGDGFEJOj@S|@e@jBADQt@WlACJyAbGQt@EGCEEa@OBYJXKNCD`@BDDFa@tBAJAD?L?NSHMEEAq@H[B}@Je@FM@EJOj@MXELQ`@Wh@_@l@i@v@[\\_@`@GFBJ@?BBZhADJBLCBA@@ABCCMEK[iACCA?CKFG^a@Z]h@w@^m@Vi@Pa@DMLYNk@DKLAd@G|@KZCp@ID@LDRIFPBB@Dp@xALVTh@Tf@JRBL@HALB@@B?@BDDHDJBF@@?B@Z?FHFPX`@fAb@nAb@nAdBzEM~@]zDOfBSjCCd@|GfAHBHDHFHJFJVh@BHFHBDDFHHJDHDHB~@PvCb@TJGh@QdBWvBMlAAJi@`FGd@[lCALCR?DCNANKv@UrBGf@KdACZIp@I`AEd@AFAPCPIn@Gj@E\\?DEVIb@Ed@WxBg@rEYnCAL[vCQ|AOlAUtBo@~FGh@c@bFIl@a@zCiAdK_@fDIn@QxAGh@KbAOxAIx@WfCCPKbAOxAUnBSnBOhASbA_@nB[xAId@Or@_ArEe@vBKd@u@rDu@rDUdAKh@I^Ox@CLCNCLGZg@~B?Da@nBq@hDAHAJAJANCd@?LAFGjBG|BWbIEpAARGtBGdBOAAd@AHA^Jd@Cz@ElAKpDWnI?JCh@EjBExAAf@YlIElAATEjAA^An@@o@@_@DkA@UDmAXmInAKVILOl@i@DMZoHFaBJwB?g@?S@QVDb@@XBJAHCJCTW^{@fA_CRaAJ{@TeAz@gCh@wA`@@\\KR[HsANmBRcBJa@b@?H@H?b@HXHX}BBIFEF@b@Pc@QGAGDCHY|BYIc@II?IAc@?d@wEK?k@PeBk@Gj@It@I~@H_AHu@Fk@`@mBT}AF_BDkBDuABuA@_ALB^L`AXZQPk@JuADq@@IT}BNaBKUJTO`BU|BAHEp@KtAQj@[PaAY_@MMCOGQICAMWMQ]s@a@oACK_@mAe@aB_@wAWq@ACJe@d@wB~@sENs@He@ZyA^oBRcANiARoBToBNyAJcABQVgCHy@NyAJcAFi@PyAHo@^gDhAeK`@{CHm@b@cFFi@n@_GTuBNmAP}AZwC@MXoCf@sEVyBDe@Hc@DW?ED]Fk@Ho@BQ@Q@GDe@M?EAKCIAa@KgB[QCy@QMCKC_ASCAC?KCKCK?I@E@E@ACACAACGQ{@Mk@GKIKICKAo@EAf@A^?BAd@AP?DEzAATAZAX@XKDK@SDSBSBQ@_@?IAIEIGGMEQASUC_@EB{@Cz@^DTB@RDPFLHFHDH@^?PARCRCREJAJEHCROHEDCVSDCDEBEBGDGDKNa@HUDGDGBCBCDADAHAJ?JBJBB?B@~@RJBLBx@PPBfBZ`@JH@JBD@L?HaAHq@B[JeAFg@TsBJw@@OBO?EBS@MZmCFe@h@aF@KLmAVwBPeBFi@Fm@\\{CRgBHw@@OBQ@QBSHu@D]BMJ_ABYNkAFc@ViCFc@NuARaBBBB?FBF@NBfAPANFBDHVd@ILHMLVDEWe@Gi@WEgAQOCGAGCC?CCN}ALeAZsCHy@P_Bb@uDBS?GJ}@NwADi@J_A`@yD@KFa@@OHa@DW@C@KTiABKPw@Nm@Le@Lk@Ni@Pq@h@{Bb@aBb@iBLe@R{@FUBIHWDUXiAJa@BGJc@Ni@@GH[Nk@Ps@R{@Rw@FSLg@XgA\\yAf@mBDOViAFQT_A\\uA^wAPy@Z}AZsAx@aDBKhBoHNi@XiAj@{B@E@EPu@Ni@DQDQR{@Nk@DMDSv@}CH_@x@aDnB}Hz@gD@EH[@@DDHDDBD?D?BAFILWTm@n@yAVi@Le@dBoDFQLP\\j@FJHPBBo@tACD?D?H@B@B\\h@B@B@BABCLYMXCBC@CACA]i@ACAC?I?EBEn@uACCIQGK]k@MQKO{As@UKAAPiAD[Js@@MHi@@Kl@eEdAoHD_@Jm@LeABMRwABQ@?D@HBHB|B^APv@Lw@M@Q}B_@ICICEAA?CPSvACLMdAKl@A?CAKEOEWEK?S?MD]NiBz@cCt@E@C@GJCT]C]Ee@KKCMAITKh@ETCHENEPOv@IVOCeAUaAQIBELABERA@DB??"
+    }
+  ]
+}

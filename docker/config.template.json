@@ -1,0 +1,5 @@
+{
+  "vroomUrl": "${VROOM_URL}",
+  "mapboxToken": "${MAPBOX_TOKEN}",
+  "commitHash": "${COMMIT_HASH}"
+}
