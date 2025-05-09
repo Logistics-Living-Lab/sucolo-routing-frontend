@@ -15,7 +15,7 @@ RUN ng build --configuration=production
 FROM nginx:1.28.0
 ENV HTML_DIR=/usr/share/nginx/html
 
-COPY --from=compile-image /app/dist/sucolo-routing-frontend $HTML_DIR
+COPY --from=compile-image /app/dist/sucolo-routing-frontend/browser $HTML_DIR
 COPY docker/entrypoint.sh /tmp/
 COPY docker/config.template.json /tmp/
 COPY docker/default.conf /etc/nginx/conf.d/
