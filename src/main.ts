@@ -3,6 +3,8 @@ import {appConfig} from './app/app.config';
 import {AppComponent} from './app/app.component';
 import {provideMapboxGL} from 'ngx-mapbox-gl';
 import {AppConfig} from './app/config/config.interface';
+import {provideAuth} from 'angular-auth-oidc-client';
+import {authConfig} from './app/auth/auth.config';
 
 fetch('/assets/config.json')
   .then(res => res.json())
@@ -14,7 +16,8 @@ fetch('/assets/config.json')
       {
         provide: "APP_CONFIG",
         useValue: config,
-      }
+      },
+      provideAuth(authConfig)
     )
     return bootstrapApplication(AppComponent, appConfig);
   })
