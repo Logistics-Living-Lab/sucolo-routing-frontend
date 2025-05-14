@@ -10,7 +10,7 @@ import {
 import {authConfig} from './app/auth/auth.config';
 import {isArray} from 'lodash';
 
-fetch('/assets/config.json')
+fetch('assets/config.json')
   .then(res => res.json())
   .then((config: AppConfig) => {
     appConfig.providers.push(
