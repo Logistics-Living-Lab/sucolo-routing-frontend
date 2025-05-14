@@ -23,5 +23,5 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_REGISTRY_REPO }}/lll/sucolo-routing-frontend:latest
           build-args: |
-            ANGULAR_BASE_HREF: ${{ secrets.ANGULAR_BASE_HREF }}
+            ANGULAR_BASE_HREF=${{ secrets.ANGULAR_BASE_HREF }}
 
