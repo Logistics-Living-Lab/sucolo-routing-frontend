@@ -1,5 +1,7 @@
 {
   "vroomUrl": "${VROOM_URL}",
   "mapboxToken": "${MAPBOX_TOKEN}",
-  "commitHash": "${COMMIT_HASH}"
+  "commitHash": "${COMMIT_HASH}",
+  "keycloakUrl": "${KEYCLOAK_URL}",
+  "keycloakClientId":"${KEYCLOAK_CLIENT_ID}"
 }
