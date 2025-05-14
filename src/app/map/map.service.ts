@@ -8,6 +8,7 @@ import * as turf from "@turf/turf";
 import proj4 from "proj4";
 import {Vehicle} from '../models/Vehicle';
 import {ConfigService} from '../config/config.service';
+import {OidcSecurityService} from 'angular-auth-oidc-client';
 
 @Injectable({
   providedIn: 'root'

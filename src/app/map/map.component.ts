@@ -16,6 +16,7 @@ import {FormsModule} from '@angular/forms';
 import {RouteUtil} from '../models/RouteUtil';
 import {Vehicle} from '../models/Vehicle';
 import {GeoJSONSourceComponent, LayerComponent, MapComponent} from 'ngx-mapbox-gl';
+import {OidcSecurityService} from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +36,7 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
 
   matchStreets: boolean = true
 
-  constructor(protected mapService: MapService, protected zone: NgZone) {
+  constructor(protected mapService: MapService, protected zone: NgZone, protected oidcSecurityService: OidcSecurityService) {
   }
 
   ngOnDestroy(): void {
@@ -43,6 +44,19 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // console.log("Test")
+    // // this.oidcSecurityService.logoff().subscribe()
+    // this.oidcSecurityService.checkAuth()
+    //   .subscribe((auth) => {
+    //     console.log("Test")
+    //     console.log(auth)
+    //     if (!auth.isAuthenticated) {
+    //       this.oidcSecurityService.authorize()
+    //     }
+    //   }, (error) => {
+    //     // this.oidcSecurityService.logoff()
+    //     console.error(error)
+    //   })
     this.mapService.setMapLocation.subscribe(
       (location: any) => this.onNewMapLocationReceived(location)
     )

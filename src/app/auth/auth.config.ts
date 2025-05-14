@@ -1,15 +1,19 @@
-import { PassedInitialConfig } from 'angular-auth-oidc-client';
+import {LogLevel, PassedInitialConfig} from 'angular-auth-oidc-client';
 
 export const authConfig: PassedInitialConfig = {
   config: {
-              authority: '',
-              redirectUrl: window.location.origin,
-              postLogoutRedirectUri: window.location.origin,
-              clientId: 'please-enter-clientId',
-              scope: 'please-enter-scopes', // 'openid profile offline_access ' + your scopes
-              responseType: 'code',
-              silentRenew: true,
-              useRefreshToken: true,
-              renewTimeBeforeTokenExpiresInSeconds: 30,
-          }
+    redirectUrl: window.location.origin + "/callback",
+    postLogoutRedirectUri: window.location.origin,
+    scope: 'openid profile email offline_access', // 'openid profile offline_access ' + your scopes
+    responseType: 'code',
+    silentRenew: true,
+    useRefreshToken: true,
+    renewTimeBeforeTokenExpiresInSeconds: 30,
+    historyCleanupOff: false,
+    secureRoutes: [],
+    postLoginRoute: "/",
+    // customParamsEndSessionRequest: [{
+    //   "id_token_hint": "test"
+    // }]
+  }
 }
