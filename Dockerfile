@@ -5,14 +5,13 @@ RUN chmod +x envsubst
 RUN mv envsubst /usr/local/bin
 
 ENV PATH="./node_modules/.bin:$PATH"
-ARG ANGULAR_BASE_HREF
-ENV BASE_REF_ARG=${ANGULAR_BASE_HREF:-/}
+ARG ANGULAR_BASE_HREF=/
 
 COPY . /app
 WORKDIR /app
 RUN npm install
 
-RUN ng build --configuration=production --base-href "$BASE_REF_ARG"
+RUN ng build --configuration=production --base-href "$ANGULAR_BASE_HREF"
 
 FROM nginx:1.28.0
 ENV HTML_DIR=/usr/share/nginx/html
