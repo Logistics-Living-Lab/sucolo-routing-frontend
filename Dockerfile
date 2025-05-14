@@ -5,7 +5,7 @@ RUN chmod +x envsubst
 RUN mv envsubst /usr/local/bin
 
 ENV PATH="./node_modules/.bin:$PATH"
-ARG BASE_REF_ARG
+ARG ANGULAR_BASE_HREF
 ENV BASE_REF_ARG=${ANGULAR_BASE_HREF:-/}
 
 COPY . /app
