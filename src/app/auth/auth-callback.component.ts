@@ -1,4 +1,4 @@
-- aimport {Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {OidcSecurityService} from 'angular-auth-oidc-client';
 
