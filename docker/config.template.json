@@ -1,4 +1,5 @@
 {
+  "baseUrl" : "${APP_BASE_URL}",
   "vroomUrl": "${VROOM_URL}",
   "mapboxToken": "${MAPBOX_TOKEN}",
   "commitHash": "${COMMIT_HASH}",

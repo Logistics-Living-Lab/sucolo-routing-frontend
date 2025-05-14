@@ -29,9 +29,11 @@ fetch('assets/config.json')
 
 function mergeAuthConfig(config: any): PassedInitialConfig {
   if (authConfig.config && !isArray(authConfig.config)) {
+    authConfig.config.redirectUrl = config.baseUrl + authConfig.config.redirectUrl
     authConfig.config.authority = config.keycloakUrl
     authConfig.config.clientId = config.keycloakClientId
     authConfig.config.secureRoutes?.push(config.vroomUrl)
+
   }
 
   return authConfig
