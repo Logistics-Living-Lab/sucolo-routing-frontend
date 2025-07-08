@@ -17,6 +17,9 @@ import {RouteUtil} from '../models/RouteUtil';
 import {Vehicle} from '../models/Vehicle';
 import {GeoJSONSourceComponent, LayerComponent, MapComponent} from 'ngx-mapbox-gl';
 import {OidcSecurityService} from 'angular-auth-oidc-client';
+import {Shipment} from '../models/Shipment';
+import {ScenarioOptions} from '../models/ScenarioOptions';
+import {Depot} from '../models/Depot';
 
 @Component({
   selector: 'app-root',
@@ -35,6 +38,32 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
   map!: Map;
 
   matchStreets: boolean = true
+  shipmentsToGenerate: number = 10
+  shipments: Shipment[] = []
+
+  scenarioOptions = new ScenarioOptions({})
+
+  readonly depots: Depot[] = [
+    new Depot({
+      id: 1,
+      name: "Lützschena FULMO Micro-Hub",
+      addressName: "Elsterberg 6-10, 04159 Leipzig",
+      coordinates: [
+        12.271092975398838,
+        51.383806427138865,
+      ] as [number, number]
+    }),
+    new Depot({
+      id: 2,
+      name: "FULMO Plagwitz Depot",
+      addressName: "Klingenstraße 22, 04229 Leipzig",
+      coordinates: [
+        12.324161,
+        51.322871
+      ] as [number, number]
+    }),
+
+  ]
 
   constructor(protected mapService: MapService, protected zone: NgZone, protected oidcSecurityService: OidcSecurityService) {
   }
@@ -44,19 +73,7 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // console.log("Test")
-    // // this.oidcSecurityService.logoff().subscribe()
-    // this.oidcSecurityService.checkAuth()
-    //   .subscribe((auth) => {
-    //     console.log("Test")
-    //     console.log(auth)
-    //     if (!auth.isAuthenticated) {
-    //       this.oidcSecurityService.authorize()
-    //     }
-    //   }, (error) => {
-    //     // this.oidcSecurityService.logoff()
-    //     console.error(error)
-    //   })
+    this.scenarioOptions.depot = this.depots[0]
     this.mapService.setMapLocation.subscribe(
       (location: any) => this.onNewMapLocationReceived(location)
     )
@@ -147,10 +164,26 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
         ['get', 'type'],
         'start', 'Start',
         ['concat',
-          'Stop: ', ['get', 'stopIndex'],
-          '\nShipment: ', ['get', 'shipmentId'],
-          '\nDistance: ', ['get', 'distance'], 'km',
-          '\nETA: ', ['get', 'eta']
+          ['case',
+            ['all', ['has', 'stopIndex'], ['!=', ['get', 'stopIndex'], '']],
+            ['concat', 'Stop: ', ['get', 'stopIndex'], '\n'],
+            ''
+          ],
+          ['case',
+            ['all', ['has', 'shipmentId'], ['!=', ['get', 'shipmentId'], '']],
+            ['concat', 'Shipment: ', ['get', 'shipmentId'], '\n'],
+            ''
+          ],
+          ['case',
+            ['all', ['has', 'distance'], ['!=', ['get', 'distance'], '']],
+            ['concat', 'Distance: ', ['get', 'distance'], 'km\n'],
+            ''
+          ],
+          ['case',
+            ['all', ['has', 'eta'], ['!=', ['get', 'eta'], '']],
+            ['concat', 'ETA: ', ['get', 'eta']],
+            ''
+          ]
         ]
       ] as Expression,
       'text-size': 16,
@@ -251,30 +284,16 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
   }
 
   onScenario1Click($event: MouseEvent) {
-    this.sendRouteRequest(this.mapService.generateSampleRequest(this.vehicles), !this.matchStreets)
-  }
-
-  onScenario2Click($event: MouseEvent) {
-    this.sendRouteRequest(this.mapService.generateSampleRequestJobs(this.vehicles), !this.matchStreets)
-  }
-
-  onScenario3Click($event: MouseEvent) {
-    this.sendRouteRequest(this.mapService.generateSampleRequestJobsLimited(this.vehicles), !this.matchStreets)
-  }
-
-  onScenario4Click($event: MouseEvent) {
-    this.sendRouteRequest(this.mapService.generateSampleRequestLuetzschena(this.vehicles), !this.matchStreets)
+    this.sendRouteRequest(this.mapService.generateVroomRequest(this.vehicles, this.shipments, this.scenarioOptions), !this.matchStreets)
   }
 
   protected sendRouteRequest(requestBody: any, directLine = false) {
     this.mapService.calculateRoute(requestBody)
       .subscribe((routes) => {
         //Only first route at the moment
-
         routes.forEach((route) => route.optimize())
         this.routes = routes
         this.updateSelectedRoute(this.routes[0])
-
       })
   }
 
@@ -299,7 +318,6 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
       this.polylineData = route.getGeometryDirectAsGeoJson()
     }
     this.polylinePoints = route.getStepsAsGeoJsonFeatures()
-
   }
 
   onRouteClicked(route: Route) {
@@ -333,5 +351,37 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
     _.remove(this.vehicles, {id: vehicle.id})
     this.routes = []
     this.route = null
+  }
+
+  onGenerateShipmentsClick($event: MouseEvent) {
+    this.shipments = this.mapService.generateShipments(this.scenarioOptions)
+    this.polylinePoints = {
+      type: 'FeatureCollection',
+      features: this.shipments.flatMap((shipment) => {
+        return [{
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: shipment.pickup.coordinates,
+          },
+          properties: {
+            type: "pickup",
+            shipmentId: shipment.id + 1,
+          }
+        },
+          {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: shipment.delivery.coordinates,
+            },
+            properties: {
+              type: "delivery",
+              shipmentId: shipment.id + 1,
+            }
+          }
+        ]
+      })
+    }
   }
 }

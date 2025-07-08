@@ -2,25 +2,41 @@
   <div class="flex-1 w-3/4">
     <div id="mapOverlay">
       <button (click)="onScenario1Click($event)" class="map-overlay-box">
-        <p>Scenario 1</p>
-        <p>Pick-Up and Delivery</p>
+        <p>Calculate Routing</p>
       </button>
-      <button (click)="onScenario2Click($event)" class="map-overlay-box">
-        <p>Scenario 2</p>
-        <p>Delivery from Depot only</p>
-      </button>
-      <button (click)="onScenario3Click($event)" class="map-overlay-box">
-        <p>Scenario 3</p>
-        <p>Delivery from Depot only (Limited Capacity: 4)</p>
-      </button>
-      <button (click)="onScenario4Click($event)" class="map-overlay-box">
-        <p>Scenario 4</p>
-        <p>Delivery from Luetzschena Depot (Limited Capacity: 2)</p>
-      </button>
+      <label class="map-overlay-box inline-flex items-center space-x-2 cursor-pointer">
+        <input type="checkbox" [(ngModel)]="scenarioOptions.deliverShipmentsFromDepot"
+               (change)="onMatchStreetsChanged($event)">
+        <span>Deliver from depot</span>
+      </label>
+      <div class="map-overlay-box inline-flex items-center space-x-2 cursor-pointer">
+        <label>Depot:</label>
+        <select [(ngModel)]="scenarioOptions.depot">
+          @for (depot of depots; track depot.id; let index = $index) {
+            <option [ngValue]="depot">
+              {{ depot.name }}
+            </option>
+          }
+        </select>
+      </div>
+
       <label class="map-overlay-box inline-flex items-center space-x-2 cursor-pointer">
         <input type="checkbox" [(ngModel)]="matchStreets" (change)="onMatchStreetsChanged($event)">
         <span>Match streets</span>
       </label>
+      <label class="map-overlay-box inline-flex items-center space-x-2 cursor-pointer">
+        <input type="checkbox" [(ngModel)]="scenarioOptions.vehicleCapacity" (change)="onMatchStreetsChanged($event)">
+        <span>Limit vehicle capacity per trip (max. 4 shipments)</span>
+      </label>
+      <p class="map-overlay-box w-96 inline-flex flex-1 flex-col">
+        <label for="slider"
+               class="block mb-2 text-lg font-medium text-gray-700">{{ scenarioOptions.randomShipmentsCount }}</label>
+        <input id="slider" type="range" min="0" max="100" [(ngModel)]="scenarioOptions.randomShipmentsCount"
+               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500">
+        <button (click)="onGenerateShipmentsClick($event)">
+          <p>Generate Shipments</p>
+        </button>
+      </p>
     </div>
     <div id="mapOverlayAddVehicles" class="flex space-x-4">
       @for (vehicle of vehicles; track vehicle.id; let index = $index) {

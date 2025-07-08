@@ -9,6 +9,13 @@ import proj4 from "proj4";
 import {Vehicle} from '../models/Vehicle';
 import {ConfigService} from '../config/config.service';
 import {OidcSecurityService} from 'angular-auth-oidc-client';
+import {VroomDto} from '../models/VroomDto';
+import {VroomShipmentStepDto} from '../models/VroomShipmentStepDto';
+import {VroomJobDto} from '../models/VroomJobDto';
+import {VroomShipmentDto} from '../models/VroomShipmentDto';
+import {Shipment} from '../models/Shipment';
+import {VroomVehicleDto} from '../models/VroomVehicleDto';
+import {ScenarioOptions} from '../models/ScenarioOptions';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +23,7 @@ import {OidcSecurityService} from 'angular-auth-oidc-client';
 export class MapService {
   private readonly VROOM_URL
   private readonly COUNT_SAMPLE_SHIPMENTS = 50
+  private readonly DEFAULT_MAX_CAPACITY = 4
 
   private buildingsAsGeoJson!: FeatureCollection<Polygon>
 
@@ -28,7 +36,7 @@ export class MapService {
 
   setMapLocation: EventEmitter<any> = new EventEmitter()
 
-  calculateRoute(requestBody: any): Observable<Route[]> {
+  calculateRoute(requestBody: VroomDto): Observable<Route[]> {
     return this.httpClient.post(this.VROOM_URL, requestBody).pipe(
       map(this.transformResponseToRoute)
     )
@@ -60,237 +68,101 @@ export class MapService {
     }
   }
 
-  generateSampleRequest(vehicles: Vehicle[] = [], countShipments = this.COUNT_SAMPLE_SHIPMENTS) {
-    const shipments = []
-
-    for (let i = 0; i < countShipments; i++) {
-      const pickUpLocation = this.getRandomBuildingAsLocation()
-      const deliveryLocation = this.getRandomBuildingAsLocation()
-
-      const shipment = {
-        "pickup": {
-          "id": i,
-          "location": pickUpLocation?.coordinates,
-          "description": pickUpLocation?.name,
-          "service": 60,
-          "amount": [1]
-
-        },
-        "delivery": {
-          "id": i,
-          "location": deliveryLocation?.coordinates,
-          "description": deliveryLocation?.name,
-          "amount": [1]
-        }
+  generateShipments(scenarioOptions: ScenarioOptions) {
+    const shipments: Shipment[] = []
+    for (let i = 0; i < scenarioOptions.randomShipmentsCount; i++) {
+      let pickUpLocation
+      if (scenarioOptions.deliverShipmentsFromDepot && !!scenarioOptions.depot) {
+        pickUpLocation = scenarioOptions.depot
+      } else {
+        pickUpLocation = this.getRandomBuildingAsLocation()
       }
 
-      shipments.push(shipment)
-    }
-
-    return {
-      "shipments": shipments,
-      "vehicles": vehicles.map(vehicle => {
-        return {
-          id: vehicle.id,
-          start: [
-            12.324161,
-            51.322871
-          ],
-          description: `${vehicle.type} ${vehicle.id}`,
-          max_tasks: _.ceil((shipments.length * 2) / vehicles.length),
-          profile: vehicle.type,
-          speed_factor: 1.0
-        }
-      }),
-      "options": {
-        "g": true
-      }
-    }
-  }
-
-  generateSampleRequestJobs(vehicles: Vehicle[] = [], countJobs = this.COUNT_SAMPLE_SHIPMENTS) {
-    const jobs = []
-
-    for (let i = 0; i < countJobs; i++) {
-      const pickUpLocation = this.getRandomBuildingAsLocation()
-
-      const job = {
-        "id": i,
-        "location": pickUpLocation?.coordinates,
-        "description": pickUpLocation?.name,
-        "service": 60,
+      //CHECK
+      if (!pickUpLocation || !pickUpLocation.name || !pickUpLocation.coordinates) {
+        throw new Error("pickuplocation not set")
       }
 
-      jobs.push(job)
-    }
 
-    return {
-      "jobs": jobs,
-      "vehicles": vehicles.map(vehicle => {
-        return {
-          id: vehicle.id,
-          start: [
-            12.324161,
-            51.322871
-          ],
-          description: `${vehicle.type} ${vehicle.id}`,
-          max_tasks: _.ceil(jobs.length / vehicles.length),
-          profile: vehicle.type,
-          speed_factor: 1.0
-        }
-      }),
-      "options": {
-        "g": true
-      }
-    }
-  }
-
-  generateSampleRequestJobsLimited(vehicles: Vehicle[] = [], countShipments = this.COUNT_SAMPLE_SHIPMENTS) {
-    // const vehicle = {
-    //   "id": 1,
-    //   "start": [
-    //     12.324161,
-    //     51.322871
-    //   ],
-    //   "startDescription": "Klingenstraße 22, 04229 Leipzig",
-    //   "description": "Cargo Bike 3 (max 4 Boxes)",
-    //   "speed_factor": 1.0,
-    //   "breaks": [{
-    //     id: 1,
-    //     service: 1800,
-    //     time_windows: [[3600, 3 * 3600]],
-    //   }],
-    //   "capacity": [4],
-    //   "profile": "bike",
-    // }
-
-    const shipments = []
-    const startLocation = [
-      12.324161,
-      51.322871
-    ]
-
-    for (let i = 0; i < countShipments; i++) {
       const deliveryLocation = this.getRandomBuildingAsLocation()
 
 
-      const shipment = {
-        "pickup": {
-          "id": i,
-          "location": startLocation,
-          "description": "Klingenstraße 22, 04229 Leipzig",
-          "service": 60,
+      const shipment: Shipment = new Shipment({
+        id: i,
+        pickup: {
+          coordinates: [pickUpLocation.coordinates[0], pickUpLocation.coordinates[1]],
+          addressName: pickUpLocation.name,
+          serviceTimeSeconds: 60
         },
-        "delivery": {
-          "id": i,
-          "location": deliveryLocation?.coordinates,
-          "description": deliveryLocation?.name,
+        delivery: {
+          coordinates: [deliveryLocation?.coordinates[0], deliveryLocation?.coordinates[1]],
+          addressName: deliveryLocation?.name,
+          serviceTimeSeconds: 60
         },
-        "amount": [1],
-        "priority": countShipments - i
-      }
-
+        amount: 1
+      })
       shipments.push(shipment)
     }
-    return {
-      "shipments": shipments,
-      "vehicles": vehicles.map(vehicle => {
-        return {
-          id: vehicle.id,
-          start: startLocation,
-          description: `${vehicle.type} ${vehicle.id}`,
-          capacity: [4],
-          max_tasks: _.ceil((shipments.length * 2) / vehicles.length),
-          profile: vehicle.type,
-          speed_factor: 1.0
-        }
-      }),
-      "options": {
-        "g": true
-      }
-    }
+
+    return shipments
   }
 
-  generateSampleRequestLuetzschena(vehicles: Vehicle[] = [], countShipments = this.COUNT_SAMPLE_SHIPMENTS) {
-    const startLocation = [
-      12.271092975398838,
-      51.383806427138865,
-    ]
+  generateVroomRequest(vehicles: Vehicle[] = [], shipments: Shipment[] = [], scenarioOptions: ScenarioOptions): VroomDto {
+    const shipmentDtos: VroomShipmentDto[] = shipments.map(shipment => {
+      return new VroomShipmentDto({
+        pickup: {
+          id: shipment.id,
+          location: shipment.pickup.coordinates,
+          description: shipment.pickup.addressName,
+          service: shipment.pickup.serviceTimeSeconds
+        },
+        delivery: {
+          id: shipment.id,
+          location: shipment.delivery.coordinates,
+          description: shipment.delivery.addressName,
+          service: shipment.delivery.serviceTimeSeconds
+        },
+        amount: [shipment.amount]
+      })
+    })
 
-    const vehicle = {
-      "id": 1,
-      "start": startLocation,
-      "startDescription": "Elsterberg 6-10, 04159 Leipzig",
-      "description": "Cargo Bike 4 (max 2 Boxes)",
-      "speed_factor": 1.0,
-      "breaks": [{
-        id: 1,
-        service: 1800,
-        time_windows: [[3600, 3 * 3600]],
-      }],
-      "capacity": [2],
-      "profile": "bike",
+    if (scenarioOptions.autoAssignTasks) {
+      vehicles.forEach(vehicle => {
+        vehicle.maxTasks = _.ceil((shipments.length * 2) / vehicles.length)
+      })
     }
 
-    const shipments = []
+    if (scenarioOptions.vehicleCapacity) {
+      vehicles.forEach(vehicle => {
+        vehicle.capacity = this.DEFAULT_MAX_CAPACITY
+      })
+    }
 
-    for (let i = 0; i < countShipments; i++) {
-      const deliveryLocation = this.getRandomBuildingAsLocation()
+    const vehicleDtos: VroomVehicleDto[] = vehicles.map(vehicle => {
+      const vehicleDto = new VroomVehicleDto({
+        id: vehicle.id,
+        start: scenarioOptions.depot?.coordinates,
+        description: `${vehicle.type} ${vehicle.id}`,
+        max_tasks: vehicle.maxTasks,
+        profile: vehicle.type,
+        speed_factor: vehicle.speedFactor,
+      })
 
-      const shipment = {
-        "pickup": {
-          "id": i,
-          "location": startLocation,
-          "description": vehicle.startDescription,
-          "service": 60,
-        },
-        "delivery": {
-          "id": i,
-          "location": deliveryLocation?.coordinates,
-          "description": deliveryLocation?.name,
-        },
-        "amount": [1],
-        "priority": countShipments - i
+      if (!!vehicle.capacity) {
+        vehicleDto.capacity = [vehicle.capacity]
       }
 
-      shipments.push(shipment)
-    }
-    return {
-      "shipments": shipments,
-      "vehicles": vehicles.map(vehicle => {
-        return {
-          id: vehicle.id,
-          start: startLocation,
-          description: `${vehicle.type} ${vehicle.id}`,
-          capacity: [2],
-          max_tasks: _.ceil((shipments.length * 2) / vehicles.length),
-          profile: vehicle.type,
-          speed_factor: 1.0
-        }
-      }),
-      "options": {
+      return vehicleDto
+    })
+
+    return new VroomDto({
+      shipments: shipmentDtos,
+      vehicles: vehicleDtos,
+      options: {
         "g": true
       }
-    }
+    })
   }
-
-
-  // const jobs = []
-  //
-  // for (let i = 0; i < countJobs; i++) {
-  //   const pickUpLocation = this.getRandomBuildingAsLocation()
-  //
-  //   const job = {
-  //     "id": i,
-  //     "location": pickUpLocation?.coordinates,
-  //     "description": pickUpLocation?.name,
-  //     "service": 60,
-  //     "delivery": [1],
-  //   }
-  //
-  //   jobs.push(job)
-  // }
-
 
   protected loadBuildingsAsGeoJson() {
     proj4.defs("EPSG:25833", "+proj=utm +zone=33 +datum=ETRS89 +units=m +no_defs");

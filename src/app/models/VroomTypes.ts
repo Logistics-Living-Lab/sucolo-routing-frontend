@@ -1,0 +1,1 @@
+export type VroomTimeWindowDto = [number, number] // relative values, e.g. [0, 14400] for a 4 hours time window starting at the beginning of the planning horizon or UNIX timestamps in seconds for absolute values
