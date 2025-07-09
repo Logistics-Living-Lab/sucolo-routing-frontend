@@ -5,7 +5,7 @@ export class Vehicle {
   maxTasks?: number;
   speedFactor?: number = 1.0
   description?: string
-  capacity?: number
+  capacity: number | undefined
   startCoordinates?: [number, number]
   endCoordinates?: [number, number]
 

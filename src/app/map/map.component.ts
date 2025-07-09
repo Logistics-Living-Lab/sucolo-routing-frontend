@@ -347,10 +347,15 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
     return _.find(this.vehicles, {id: id})
   }
 
-  onVehicleRemove(vehicle: Vehicle) {
-    _.remove(this.vehicles, {id: vehicle.id})
-    this.routes = []
-    this.route = null
+  getVehicleByType(type: string) {
+    return _.filter(this.vehicles, {type: type})
+  }
+
+  onVehicleRemove(type: string) {
+    const lastVehicle: Vehicle | undefined = _.findLast(this.vehicles, {type: type}) as Vehicle | undefined
+    if (lastVehicle) {
+      _.remove(this.vehicles, {id: lastVehicle.id})
+    }
   }
 
   onGenerateShipmentsClick($event: MouseEvent) {

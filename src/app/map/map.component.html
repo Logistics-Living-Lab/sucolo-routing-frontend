@@ -1,56 +1,98 @@
 <div class="w-screen h-screen flex">
   <div class="flex-1 w-3/4">
     <div id="mapOverlay">
-      <button (click)="onScenario1Click($event)" class="map-overlay-box">
-        <p>Calculate Routing</p>
-      </button>
-      <label class="map-overlay-box inline-flex items-center space-x-2 cursor-pointer">
-        <input type="checkbox" [(ngModel)]="scenarioOptions.deliverShipmentsFromDepot"
+      <div class="map-overlay-box w-96 inline-flex flex-1 flex-col">
+        <div class="inline-flex items-center space-x-2 cursor-pointer">
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Depot:</label>
+          <select
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500  focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            [(ngModel)]="scenarioOptions.depot">
+            @for (depot of depots; track depot.id; let index = $index) {
+              <option [ngValue]="depot">
+                {{ depot.name }}
+              </option>
+            }
+          </select>
+        </div>
+        <label class="inline-flex items-center cursor-pointer" [(ngModel)]="scenarioOptions.deliverShipmentsFromDepot"
                (change)="onMatchStreetsChanged($event)">
-        <span>Deliver from depot</span>
-      </label>
-      <div class="map-overlay-box inline-flex items-center space-x-2 cursor-pointer">
-        <label>Depot:</label>
-        <select [(ngModel)]="scenarioOptions.depot">
-          @for (depot of depots; track depot.id; let index = $index) {
-            <option [ngValue]="depot">
-              {{ depot.name }}
-            </option>
-          }
-        </select>
+          <input type="checkbox" value="" class="sr-only peer">
+          <div
+            class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
+          <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Deliver from Depot</span>
+        </label>
+        <div>
+          <label for="default-range"
+                 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ scenarioOptions.randomShipmentsCount }}</label>
+          <input id="default-range" type="range" value="50" min="0" max="100"
+                 class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                 [(ngModel)]="scenarioOptions.randomShipmentsCount">
+        </div>
+        <button (click)="onGenerateShipmentsClick($event)" class="btn-dark">
+          <p>Generate Shipments</p>
+        </button>
+
+        <div class="flex items-center space-x-4">
+          <div class="flex items-center space-x-4">
+            <div class="flex items-center flex-col space-y-2">
+              <img src="assets/cargo-bike.png"/>
+              <div>{{ getVehicleByType('bike').length }}</div>
+            </div>
+            <div class="flex flex-col space-y-1">
+              <button (click)="onVehicleAdd('bike')">
+                <span class="material-symbols-outlined">add_circle</span>
+              </button>
+              <button (click)="onVehicleRemove('bike')" [disabled]="getVehicleByType('bike').length <= 0">
+                <span class="material-symbols-outlined">remove_circle</span>
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="flex items-center flex-col space-y-2">
+              <img src="assets/delivery.png"/>
+              <div>{{ getVehicleByType('car').length }}</div>
+            </div>
+            <div class="flex flex-col space-y-1">
+              <button (click)="onVehicleAdd('car')">
+                <span class="material-symbols-outlined">add_circle</span>
+              </button>
+              <button (click)="onVehicleRemove('car')" [disabled]="getVehicleByType('car').length <= 0">
+                <span class="material-symbols-outlined">remove_circle</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <label class="map-overlay-box inline-flex items-center space-x-2 cursor-pointer">
+          <input type="checkbox" [(ngModel)]="scenarioOptions.vehicleCapacity"
+                 (change)="onMatchStreetsChanged($event)">
+          <span>Limit vehicle capacity per trip (max. 4 shipments)</span>
+        </label>
+        <button (click)="onScenario1Click($event)" class="btn-dark" disabled>
+          <p>Calculate Routing</p>
+        </button>
       </div>
+
 
       <label class="map-overlay-box inline-flex items-center space-x-2 cursor-pointer">
         <input type="checkbox" [(ngModel)]="matchStreets" (change)="onMatchStreetsChanged($event)">
         <span>Match streets</span>
       </label>
-      <label class="map-overlay-box inline-flex items-center space-x-2 cursor-pointer">
-        <input type="checkbox" [(ngModel)]="scenarioOptions.vehicleCapacity" (change)="onMatchStreetsChanged($event)">
-        <span>Limit vehicle capacity per trip (max. 4 shipments)</span>
-      </label>
-      <p class="map-overlay-box w-96 inline-flex flex-1 flex-col">
-        <label for="slider"
-               class="block mb-2 text-lg font-medium text-gray-700">{{ scenarioOptions.randomShipmentsCount }}</label>
-        <input id="slider" type="range" min="0" max="100" [(ngModel)]="scenarioOptions.randomShipmentsCount"
-               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500">
-        <button (click)="onGenerateShipmentsClick($event)">
-          <p>Generate Shipments</p>
-        </button>
-      </p>
+
+
     </div>
-    <div id="mapOverlayAddVehicles" class="flex space-x-4">
-      @for (vehicle of vehicles; track vehicle.id; let index = $index) {
-        <div class="map-overlay-box">
-          <p>ID: {{ vehicle.id }}</p>
-          <img [src]="getImageSrcForVehicle(vehicle)"/>
-          <button (click)="onVehicleRemove(vehicle)" class="map-overlay-box w-32">Remove</button>
-        </div>
-      }
-      <div class="flex flex-col items-center justify-center space-y-4">
-        <button (click)="onVehicleAdd('bike')" class="map-overlay-box w-32">Add Bike</button>
-        <button (click)="onVehicleAdd('car')" class="map-overlay-box w-32">Add Truck</button>
-      </div>
-    </div>
+    <!--    <div id="mapOverlayAddVehicles" class="flex space-x-4">-->
+    <!--      @for (vehicle of vehicles; track vehicle.id; let index = $index) {-->
+    <!--        <div class="map-overlay-box">-->
+    <!--          <p>ID: {{ vehicle.id }}</p>-->
+    <!--          <img [src]="getImageSrcForVehicle(vehicle)"/>-->
+    <!--          <button (click)="onVehicleRemove(vehicle)" class="map-overlay-box w-32">Remove</button>-->
+    <!--        </div>-->
+    <!--      }-->
+    <!--      <div class="flex flex-col items-center justify-center space-y-4">-->
+    <!--        <button (click)="onVehicleAdd('bike')" class="map-overlay-box w-32">Add Bike</button>-->
+    <!--        <button (click)="onVehicleAdd('car')" class="map-overlay-box w-32">Add Truck</button>-->
+    <!--      </div>-->
+    <!--    </div>-->
     <div id="mapOverlayRoutes" class="flex">
       @for (route of routes; track route; let index = $index) {
         <button (click)="onRouteClicked(route)" class="map-overlay-box">

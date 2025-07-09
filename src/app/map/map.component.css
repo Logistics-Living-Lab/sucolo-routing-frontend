@@ -30,18 +30,18 @@ mgl-map {
 }
 
 .map-overlay-box,
-.map-overlay-box * {
+.map-overlay-box {
   @apply
   bg-gray-600 text-white font-semibold
 }
 
 
-#mapOverlay > button,
-#mapOverlay > label,
-#mapOverlayRoutes > button,
-#mapOverlayRoutes > label,
-#mapOverlayAddVehicles button {
-  @apply
-  hover:bg-gray-700 active:bg-gray-900 transition-all  m-2
-}
+/*#mapOverlay > button,*/
+/*#mapOverlay > label,*/
+/*#mapOverlayRoutes > button,*/
+/*#mapOverlayRoutes > label,*/
+/*#mapOverlayAddVehicles button {*/
+/*  @apply*/
+/*  hover:bg-gray-700 active:bg-gray-900 transition-all  m-2*/
+/*}*/
 

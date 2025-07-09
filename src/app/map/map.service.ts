@@ -132,12 +132,6 @@ export class MapService {
       })
     }
 
-    if (scenarioOptions.vehicleCapacity) {
-      vehicles.forEach(vehicle => {
-        vehicle.capacity = this.DEFAULT_MAX_CAPACITY
-      })
-    }
-
     const vehicleDtos: VroomVehicleDto[] = vehicles.map(vehicle => {
       const vehicleDto = new VroomVehicleDto({
         id: vehicle.id,
@@ -148,12 +142,21 @@ export class MapService {
         speed_factor: vehicle.speedFactor,
       })
 
-      if (!!vehicle.capacity) {
-        vehicleDto.capacity = [vehicle.capacity]
-      }
 
       return vehicleDto
     })
+
+    if (scenarioOptions.vehicleCapacity) {
+      vehicleDtos.forEach(vehicleDto => {
+        vehicleDto.capacity = [this.DEFAULT_MAX_CAPACITY]
+      })
+    }
+    //Remove capacity on shipments when not needed - otherwise VROOM throws error
+    else {
+      _.forEach(shipmentDtos, shipmentDto => {
+        delete shipmentDto.amount;
+      });
+    }
 
     return new VroomDto({
       shipments: shipmentDtos,
