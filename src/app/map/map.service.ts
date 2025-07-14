@@ -72,6 +72,7 @@ export class MapService {
     const shipments: Shipment[] = []
     for (let i = 0; i < scenarioOptions.randomShipmentsCount; i++) {
       let pickUpLocation
+      console.log(scenarioOptions.deliverShipmentsFromDepot, scenarioOptions.depot)
       if (scenarioOptions.deliverShipmentsFromDepot && !!scenarioOptions.depot) {
         pickUpLocation = scenarioOptions.depot
       } else {
