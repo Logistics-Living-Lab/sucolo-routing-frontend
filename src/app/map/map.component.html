@@ -13,13 +13,16 @@
               </option>
             }
           </select>
-          <label class="flex flex-1 items-center cursor-pointer justify-end"
-                 (change)="onMatchStreetsChanged($event)">
-            <input type="checkbox" [(ngModel)]="scenarioOptions.deliverShipmentsFromDepot" class="sr-only peer">
-            <div
-              class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
-            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Deliver from Depot</span>
-          </label>
+          <app-toggle [value]="scenarioOptions.deliverShipmentsFromDepot">
+            Deliver from Depot
+          </app-toggle>
+          <!--          <label class="flex flex-1 items-center cursor-pointer justify-end"-->
+          <!--                 (change)="onMatchStreetsChanged($event)">-->
+          <!--            <input type="checkbox" [(ngModel)]="scenarioOptions.deliverShipmentsFromDepot" class="sr-only peer">-->
+          <!--            <div-->
+          <!--              class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>-->
+          <!--            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Deliver from Depot</span>-->
+          <!--          </label>-->
         </div>
         <div>
           <label for="default-range"
@@ -28,9 +31,9 @@
                  class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
                  [(ngModel)]="scenarioOptions.randomShipmentsCount">
         </div>
-        <button (click)="onGenerateShipmentsClick($event)" class="btn-dark">
+        <app-button (click)="onGenerateShipmentsClick($event)">
           <p>Generate Shipments</p>
-        </button>
+        </app-button>
 
         <div class="flex items-center space-x-4">
           <div class="flex items-center space-x-4">
@@ -67,9 +70,9 @@
                  (change)="onMatchStreetsChanged($event)">
           <span>Limit vehicle capacity per trip (max. 4 shipments)</span>
         </label>
-        <button (click)="onScenario1Click($event)" class="btn-dark" disabled>
+        <app-button (click)="onScenario1Click($event)">
           <p>Calculate Routing</p>
-        </button>
+        </app-button>
       </div>
 
 

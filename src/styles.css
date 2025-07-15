@@ -26,43 +26,4 @@ body {
   dark:bg-gray-800
 }
 
-.btn-dark {
-  @apply
-  text-white background-color
-  hover:bg-gray-900
-  rounded-lg
-  text-sm
-  px-5
-  py-2.5
-  mb-2
-  dark:hover:bg-gray-700
-  dark:border-gray-700;
-}
-
-.btn-dark:disabled {
-  @apply
-  background-color
-  py-2.5
-  px-5
-  mb-2
-  text-sm
-  font-medium
-  text-gray-900
-  focus:outline-none
-  bg-white
-  rounded-lg
-  border
-  border-gray-200
-  focus:z-10
-  focus:ring-4
-    /*focus:ring-gray-100*/
-    /*dark:focus:ring-gray-700*/
-  dark:text-gray-400
-  dark:border-gray-600
-  dark:bg-gray-700
-}
-
-.btn-dark:disabled:hover {
-  @apply cursor-not-allowed;
-}
 

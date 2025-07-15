@@ -20,6 +20,8 @@ import {OidcSecurityService} from 'angular-auth-oidc-client';
 import {Shipment} from '../models/Shipment';
 import {ScenarioOptions} from '../models/ScenarioOptions';
 import {Depot} from '../models/Depot';
+import {ButtonComponent} from '../shared/components/button/button.component';
+import {ToggleComponent} from '../shared/components/toggle/toggle.component';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +32,8 @@ import {Depot} from '../models/Depot';
     MapComponent,
     GeoJSONSourceComponent,
     LayerComponent,
+    ButtonComponent,
+    ToggleComponent,
   ],
   templateUrl: './map.component.html',
   styleUrl: './map.component.css'
