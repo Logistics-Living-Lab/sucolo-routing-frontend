@@ -1,0 +1,11 @@
+.btn-add-vehicle {
+  @apply text-green-500
+}
+
+.btn-remove-vehicle {
+  @apply text-red-600
+}
+
+.btn-add-vehicle:disabled, .btn-remove-vehicle:disabled {
+  @apply text-gray-700
+}

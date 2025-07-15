@@ -10,6 +10,8 @@ import {RouteStep} from '../models/RouteStep';
 import {AggregatedRouteStep} from '../models/AggregatedRouteStep';
 import * as _ from "lodash";
 import {RouteUtil} from '../models/RouteUtil';
+import {MatIcon} from '@angular/material/icon';
+import {MatAnchor, MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-route-details',
@@ -17,7 +19,10 @@ import {RouteUtil} from '../models/RouteUtil';
     JsonPipe,
     NgIf,
     NgForOf,
-    DecimalPipe
+    DecimalPipe,
+    MatIcon,
+    MatButton,
+    MatAnchor
   ],
   templateUrl: './route-details.component.html',
   styleUrl: './route-details.component.css'
@@ -101,7 +106,7 @@ export class RouteDetailsComponent {
     }
   }
 
-  onButtonClicked(step: RouteStep | AggregatedRouteStep) {
+  onButtonClicked(step: RouteStep | AggregatedRouteStep, event: MouseEvent) {
     this.mapService.setMapLocation.next(step.location)
   }
 

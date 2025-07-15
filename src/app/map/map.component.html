@@ -1,73 +1,62 @@
 <div class="w-screen h-screen flex">
   <div class="flex-1 w-3/4">
-    <div id="mapOverlay">
-      <div class="map-overlay-box w-[500px] inline-flex flex-1 flex-col">
-        <mat-form-field>
-          <mat-label>Depot:</mat-label>
-          <mat-select [(ngModel)]="scenarioOptions.depot">
-            @for (depot of depots; track depot.id; let index = $index) {
-              <mat-option [value]="depot">
-                {{ depot.name }}
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-        <mat-slide-toggle [(ngModel)]="scenarioOptions.deliverShipmentsFromDepot">Deliver from Depot</mat-slide-toggle>
-        <mat-slider discrete min="1" max="100" step="1">
+    <div id="mapOverlay" class="flex items-start">
+      <div class="map-overlay-box w-[500px] h-[270px] flex flex-1 justify-center flex-col gap-4">
+        <div class="flex flex-1 justify-center gap-4">
+          <mat-form-field class="flex w-full">
+            <mat-label>Depot</mat-label>
+            <mat-select [(ngModel)]="scenarioOptions.depot">
+              @for (depot of depots; track depot.id; let index = $index) {
+                <mat-option [value]="depot">
+                  {{ depot.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-slide-toggle [(ngModel)]="scenarioOptions.deliverShipmentsFromDepot">
+            Deliver from Depot
+          </mat-slide-toggle>
+        </div>
+        <div class="flex justify-center">
+          Shipments to generate: {{ scenarioOptions.randomShipmentsCount }}
+        </div>
+        <mat-slider min="1" max="100" step="1">
           <input matSliderThumb [(ngModel)]="scenarioOptions.randomShipmentsCount">
         </mat-slider>
         <button mat-flat-button (click)="onGenerateShipmentsClick($event)">
           <p>Generate Shipments</p>
         </button>
+      </div>
+      <div class="map-overlay-box h-[270px] flex flex-1 justify-center flex-col gap-4">
+        <div class="flex flex-1 justify-center space-x-4">
+          <app-vehicle-form-button imageSrc="assets/cargo-bike.png"
+                                   (vehicleAdded)="onVehicleAdd('bike')"
+                                   (vehicleRemoved)="onVehicleRemove('bike')"
+                                   [length]="getVehicleByType('bike').length">
 
-        <div class="flex items-center space-x-4">
-          <div class="flex items-center space-x-4">
-            <div class="flex items-center flex-col space-y-2">
-              <img src="assets/cargo-bike.png"/>
-              <div>{{ getVehicleByType('bike').length }}</div>
-            </div>
-            <div class="flex flex-col space-y-1">
-              <button mat-icon-button (click)="onVehicleAdd('bike')">
-                <mat-icon>add_circle</mat-icon>
-              </button>
-              <button mat-icon-button (click)="onVehicleRemove('bike')"
-                      [disabled]="getVehicleByType('bike').length <= 0">
-                <mat-icon class="material-symbols-outlined">remove_circle</mat-icon>
-              </button>
-            </div>
-          </div>
-          <div class="flex items-center space-x-4">
-            <div class="flex items-center flex-col space-y-2">
-              <img src="assets/delivery.png"/>
-              <div>{{ getVehicleByType('car').length }}</div>
-            </div>
-            <div class="flex flex-col space-y-1">
-              <button mat-icon-button (click)="onVehicleAdd('car')">
-                <mat-icon class="material-symbols-outlined">add_circle</mat-icon>
-              </button>
-              <button mat-icon-button (click)="onVehicleRemove('car')" [disabled]="getVehicleByType('car').length <= 0">
-                <mat-icon class="material-symbols-outlined">remove_circle</mat-icon>
-              </button>
-            </div>
-          </div>
+          </app-vehicle-form-button>
+          <app-vehicle-form-button imageSrc="assets/delivery.png"
+                                   (vehicleAdded)="onVehicleAdd('car')"
+                                   (vehicleRemoved)="onVehicleRemove('car')"
+                                   [length]="getVehicleByType('car').length">
+
+          </app-vehicle-form-button>
         </div>
-        <label class="map-overlay-box inline-flex items-center space-x-2 cursor-pointer">
-          <input type="checkbox" [(ngModel)]="scenarioOptions.vehicleCapacity"
-                 (change)="onMatchStreetsChanged($event)">
-          <span>Limit vehicle capacity per trip (max. 4 shipments)</span>
-        </label>
-        <button mat-flat-button (click)="onScenario1Click($event)">
+        <div class="flex justify-center w-full">
+          <mat-slide-toggle [(ngModel)]="scenarioOptions.vehicleCapacity">
+            Limit vehicle capacity per trip (max. 4 shipments)
+          </mat-slide-toggle>
+        </div>
+        <button mat-flat-button (click)="onScenario1Click($event)" [disabled]="!isFormValid()">
           <p>Calculate Routing</p>
         </button>
       </div>
+      <div class="map-overlay-box">
+        <mat-slide-toggle [(ngModel)]="matchStreets" (change)="onMatchStreetsChanged($event)">
+          Match streets
+        </mat-slide-toggle>
+      </div>
     </div>
-
-    <label class="map-overlay-box inline-flex items-center space-x-2 cursor-pointer">
-      <input type="checkbox" [(ngModel)]="matchStreets" (change)="onMatchStreetsChanged($event)">
-      <span>Match streets</span>
-    </label>
-
-
     <div id="mapOverlayRoutes" class="flex">
       @for (route of routes; track route; let index = $index) {
         <button (click)="onRouteClicked(route)" class="map-overlay-box">

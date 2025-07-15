@@ -12,27 +12,13 @@ mgl-map {
 
 #mapOverlayRoutes {
   position: absolute;
-  bottom: 100px;
-  left: 10px;
-  z-index: 1;
-}
-
-#mapOverlayAddVehicles {
-  position: absolute;
-  top: 90px;
+  bottom: 50px;
   left: 10px;
   z-index: 1;
 }
 
 .map-overlay-box {
-  @apply
-  py-2 px-4 rounded-lg shadow-md m-2
-}
-
-.map-overlay-box,
-.map-overlay-box {
-  @apply
-  bg-gray-600 text-white font-semibold
+  @apply py-4 px-4 rounded-lg m-2 bg-gray-600 text-white
 }
 
 

@@ -20,8 +20,6 @@ import {OidcSecurityService} from 'angular-auth-oidc-client';
 import {Shipment} from '../models/Shipment';
 import {ScenarioOptions} from '../models/ScenarioOptions';
 import {Depot} from '../models/Depot';
-import {ButtonComponent} from '../shared/components/button/button.component';
-import {ToggleComponent} from '../shared/components/toggle/toggle.component';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatOption, MatSelect, MatSelectTrigger} from '@angular/material/select';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
@@ -29,6 +27,8 @@ import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {MatInput} from '@angular/material/input';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
+import {VehicleFormButtonComponent} from './vehicle-form-button/vehicle-form-button.component';
+import {MatDivider} from '@angular/material/divider';
 
 @Component({
   selector: 'app-root',
@@ -39,8 +39,6 @@ import {MatIcon} from '@angular/material/icon';
     MapComponent,
     GeoJSONSourceComponent,
     LayerComponent,
-    ButtonComponent,
-    ToggleComponent,
     MatFormField,
     MatLabel,
     MatSelect,
@@ -52,7 +50,9 @@ import {MatIcon} from '@angular/material/icon';
     MatInput,
     MatButton,
     MatIconButton,
-    MatIcon
+    MatIcon,
+    VehicleFormButtonComponent,
+    MatDivider
   ],
   templateUrl: './map.component.html',
   styleUrl: './map.component.css'
@@ -103,7 +103,7 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
   }
 
   title = 'sucolo-routing-frontend';
-  polylineData: GeoJSON.FeatureCollection<LineString> = {
+  polylineData: GeoJSON.FeatureCollection<LineString> | undefined = {
     type: 'FeatureCollection',
     features: [{
       type: 'Feature',
@@ -327,20 +327,27 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
     })
   }
 
-  onMatchStreetsChanged($event: Event) {
+  onMatchStreetsChanged($event: any) {
     console.log(this.matchStreets)
   }
 
   protected readonly RouteUtil = RouteUtil;
 
-  updateSelectedRoute(route: Route) {
+  updateSelectedRoute(route: Route | null) {
     this.route = route
-    if (this.matchStreets) {
-      this.polylineData = route.getGeometryAsGeoJson()
+    if (route) {
+      if (this.matchStreets) {
+        this.polylineData = route.getGeometryAsGeoJson()
+      } else {
+        this.polylineData = route.getGeometryDirectAsGeoJson()
+      }
     } else {
-      this.polylineData = route.getGeometryDirectAsGeoJson()
+      this.polylineData = {
+        type: 'FeatureCollection',
+        features: []
+      };
     }
-    this.polylinePoints = route.getStepsAsGeoJsonFeatures()
+    // this.polylinePoints = route.getStepsAsGeoJsonFeatures()
   }
 
   onRouteClicked(route: Route) {
@@ -362,8 +369,6 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
       id: this.vehicles.length + 1,
       type: type
     }))
-    this.routes = []
-    this.route = null
   }
 
   getVehicleById(id: number) {
@@ -382,6 +387,9 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
   }
 
   onGenerateShipmentsClick($event: MouseEvent) {
+    this.updateSelectedRoute(null)
+    this.routes = []
+
     this.shipments = this.mapService.generateShipments(this.scenarioOptions)
     this.polylinePoints = {
       type: 'FeatureCollection',
@@ -411,5 +419,14 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
         ]
       })
     }
+  }
+
+  isFormValid() {
+    return !_.isEmpty(this.scenarioOptions.depot) && !_.isEmpty(this.shipments)
+  }
+
+  resetRoute() {
+    this.routes = []
+    this.route = null
   }
 }

@@ -1,7 +1,4 @@
-<div class="h-screen w-full overflow-y-auto ">
-  <!--  <pre>-->
-  <!--    {{ route | json }}-->
-  <!--  </pre>-->
+<div class="h-screen w-full overflow-y-auto">
   <h1 *ngIf="isDebugMode" class="bg-red-600">Debug Mode</h1>
   <div *ngIf="route" class="bg-gray-900">
     <div class="max-w-4xl mx-auto shadow-xl rounded-lg p-8 overflow-y text-white">
@@ -28,10 +25,10 @@
         <div class="max-w-lg mx-auto">
           <div class="border-l border-gray-700">
             <!-- Timeline Item -->
-            <div class="mb-8 pl-6 relative" *ngFor="let step of route.steps; let stepIndex = index">
+            <div class="mb-8 pl-6 relative" *ngFor="let step of route.steps; let stepIndex=index">
               <div
-                class="absolute -left-3 top-2 w-6 h-6 bg-gray-800 border border-gray-700 rounded-full flex items-center justify-center">
-                <span class="material-symbols-outlined">{{ getMaterialIconForStepType(step.type) }}</span>
+                class="absolute -left-4 w-8 h-8 bg-gray-800 border border-gray-700 rounded-full flex items-center justify-center">
+                <mat-icon fontSet="material-symbols-outlined">{{ getMaterialIconForStepType(step.type) }}</mat-icon>
               </div>
 
               <div class="flex justify-between items-center">
@@ -39,9 +36,9 @@
                   <span *ngIf="step.type === 'break'"> - {{ getEta(step.arrival + step.getTotalDuration()) }}</span>
                 </p>
               </div>
-              <button (click)="onButtonClicked(step)">
+              <a class="cursor-pointer" (click)=" onButtonClicked(step, $event)">
                 <h3 class=" text-lg font-medium mt-1">{{ getHeaderForStep(step) }}</h3>
-              </button>
+              </a>
               <p class="text-gray-400 text-sm">{{ step.description }}</p>
               <p class="text-sm mt-1">
                 <span>{{ getRouteDurationString(step.duration) }} h</span> ·
@@ -49,7 +46,6 @@
                 <span>{{ getAverageSpeedInKph(step) | number : '1.0-1' }} km/h</span>
               </p>
             </div>
-
           </div>
         </div>
       </div>

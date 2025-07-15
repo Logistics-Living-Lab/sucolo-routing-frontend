@@ -1,0 +1,14 @@
+<div class="flex items-center space-x-4">
+  <div class="flex items-center flex-col space-y-2">
+    <img [src]="imageSrc"/>
+    <div>{{ length }}</div>
+  </div>
+  <div class="flex flex-col space-y-1">
+    <button mat-icon-button class="btn-add-vehicle" (click)="onVehicleAdded($event)" [disabled]="length >= 10">
+      <mat-icon>add_circle</mat-icon>
+    </button>
+    <button mat-icon-button class="btn-remove-vehicle" (click)="onVehicleRemoved($event)" [disabled]="length <= 0">
+      <mat-icon>remove_circle</mat-icon>
+    </button>
+  </div>
+</div>
