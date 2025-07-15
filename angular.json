@@ -32,6 +32,7 @@
               }
             ],
             "styles": [
+              "src/custom-theme.scss",
               "src/styles.css",
               "mapbox-gl/dist/mapbox-gl.css"
             ],

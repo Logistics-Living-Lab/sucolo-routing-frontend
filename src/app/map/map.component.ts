@@ -22,6 +22,13 @@ import {ScenarioOptions} from '../models/ScenarioOptions';
 import {Depot} from '../models/Depot';
 import {ButtonComponent} from '../shared/components/button/button.component';
 import {ToggleComponent} from '../shared/components/toggle/toggle.component';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatOption, MatSelect, MatSelectTrigger} from '@angular/material/select';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {MatSlider, MatSliderThumb} from '@angular/material/slider';
+import {MatInput} from '@angular/material/input';
+import {MatButton, MatIconButton} from '@angular/material/button';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +41,18 @@ import {ToggleComponent} from '../shared/components/toggle/toggle.component';
     LayerComponent,
     ButtonComponent,
     ToggleComponent,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatSelectTrigger,
+    MatOption,
+    MatSlideToggle,
+    MatSlider,
+    MatSliderThumb,
+    MatInput,
+    MatButton,
+    MatIconButton,
+    MatIcon
   ],
   templateUrl: './map.component.html',
   styleUrl: './map.component.css'

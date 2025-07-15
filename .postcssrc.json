@@ -2,10 +2,5 @@
   "plugins": {
     "tailwindcss": {},
     "autoprefixer": {}
-  },
-  "safelist": [
-    "peer-checked:after:translate-x-full",
-    "rtl:peer-checked:after:-translate-x-full",
-    "after:content-['']"
-  ]
+  }
 }

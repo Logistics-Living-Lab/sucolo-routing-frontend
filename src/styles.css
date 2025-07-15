@@ -1,29 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
-@tailwind base;
-@tailwind components;
+/* Use tailwind just for spacing */
 @tailwind utilities;
 
-/* DEFAULT DARK MODE */
-/*@custom-variant dark (&:where(.dark, .dark *));*/
+html, body {
+  height: 100%;
+}
 
 body {
-  margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   align-items: center; /* Center content vertically */
-  overflow: hidden; /* Prevent scrolling */
 }
-
-.text-color {
-  @apply
-  text-gray-900
-}
-
-.background-color {
-  @apply
-  bg-gray-700
-  dark:bg-gray-800
-}
-
-

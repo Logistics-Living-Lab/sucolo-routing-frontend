@@ -1,12 +1,12 @@
-/*input {*/
-/*  @apply*/
-/*  w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer ;*/
+/*!*input {*!*/
+/*!*  @apply*!*/
+/*!*  w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer ;*!*/
+/*!*}*!*/
+
+/*.toggle {*/
+/*  @apply relative w-11 h-6 bg-gray-200 rounded-full;*/
 /*}*/
 
-.toggle {
-  @apply relative w-11 h-6 bg-gray-200 rounded-full;
-}
-
-.content {
-  @apply ml-2 text-sm font-medium text-gray-900 dark:text-gray-300;
-}
+/*.content {*/
+/*  @apply ml-2 text-sm font-medium text-gray-900 dark:text-gray-300;*/
+/*}*/
