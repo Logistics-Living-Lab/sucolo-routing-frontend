@@ -21,6 +21,13 @@
     >
     </mgl-layer>
 
+
+    <mgl-geojson-source
+      id="polyline"
+      [data]="polylineData"
+      [lineMetrics]="true"
+    >
+    </mgl-geojson-source>
     <mgl-layer
       id="lineArrowLayer"
       type="symbol"
@@ -36,13 +43,6 @@
         }"
     >
     </mgl-layer>
-
-    <mgl-geojson-source
-      id="polyline"
-      [data]="polylineData"
-      [lineMetrics]="true"
-    >
-    </mgl-geojson-source>
     <mgl-layer
       id="polylineLayer"
       type="line"

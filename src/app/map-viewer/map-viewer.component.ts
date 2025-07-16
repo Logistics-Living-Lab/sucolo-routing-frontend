@@ -39,22 +39,15 @@ import {VroomService} from '../vroom/vroom.service';
     NgIf,
     FormsModule,
     AppMapComponent,
-    GeoJSONSourceComponent,
-    LayerComponent,
     MatFormField,
     MatLabel,
     MatSelect,
-    MatSelectTrigger,
     MatOption,
     MatSlideToggle,
     MatSlider,
     MatSliderThumb,
-    MatInput,
     MatButton,
-    MatIconButton,
-    MatIcon,
     VehicleFormButtonComponent,
-    MatDivider,
     AppMapComponent
   ],
   templateUrl: './map-viewer.component.html',
@@ -97,7 +90,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   constructor(
     protected mapService: AppMapService,
     protected zone: NgZone,
-    protected oidcSecurityService: OidcSecurityService,
     protected vroomService: VroomService
   ) {
   }
@@ -116,15 +108,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   onScenario1Click($event: MouseEvent) {
-    this.sendRouteRequest(this.vroomService.generateVroomRequest(this.vehicles, this.shipments, this.scenarioOptions), !this.matchStreets)
-  }
-
-  protected sendRouteRequest(requestBody: any, directLine = false) {
-    this.vroomService.calculateRoute(requestBody)
+    this.vroomService.sendVroomRequest(this.vehicles, this.shipments, this.scenarioOptions)
       .subscribe((routes) => {
-        //Only first route at the moment
-        routes.forEach((route) => route.optimize())
         this.routes = routes
+        //Only first route at the moment
         this.updateSelectedRoute(this.routes[0])
       })
   }
@@ -187,8 +174,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.mapService.displayShipments(this.shipments)
   }
 
-  isFormValid() {
-    return !_.isEmpty(this.scenarioOptions.depot) && !_.isEmpty(this.shipments)
+  isRouteCalculationEnabled() {
+    return !_.isEmpty(this.scenarioOptions.depot) && !_.isEmpty(this.shipments) && this.vehicles.length > 0
   }
 
   resetRoute() {

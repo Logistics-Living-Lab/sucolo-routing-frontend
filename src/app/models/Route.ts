@@ -3,9 +3,10 @@ import * as polyline from '@mapbox/polyline';
 import {FeatureCollection, GeoJSON, LineString, Point} from 'geojson';
 import {AggregatedRouteStep} from './AggregatedRouteStep';
 import * as _ from "lodash";
+import {Vehicle} from './Vehicle';
 
 export class Route {
-  vehicle!: number;
+  vehicle!: Vehicle;
   cost!: number;
   setup!: number;
   service!: number;
@@ -97,7 +98,6 @@ export class Route {
   optimize() {
     const reloadIndices = this.findDeliveryFollowedByPickup(this)
     const legs = this.splitArray(this.steps, reloadIndices)
-    console.log(legs)
 
     legs.forEach((leg, legIndex) => {
       const pickups = leg.filter((routeStep) => routeStep.type === 'pickup')
@@ -112,12 +112,12 @@ export class Route {
         );
 
         if (deliveryLegIndex !== -1 && deliveryLegIndex > legIndex) {
-          console.log(`🚀 Moving pickup of shipment ${pickup.id} from leg ${legIndex} to leg ${deliveryLegIndex}`);
+          // console.log(`🚀 Moving pickup of shipment ${pickup.id} from leg ${legIndex} to leg ${deliveryLegIndex}`);
 
           // Remove pickup from current leg
-          console.log(legs[legIndex])
+          // console.log(legs[legIndex])
           legs[legIndex] = legs[legIndex].filter((step) => !(step.id === pickup.id && step.type === "pickup"));
-          console.log(legs[legIndex])
+          // console.log(legs[legIndex])
 
           // Add pickup to the correct delivery leg
           legs[deliveryLegIndex].unshift(pickup);
@@ -129,10 +129,10 @@ export class Route {
 
     // this.steps
     //   .filter(step => step instanceof RouteStep)
-      // .forEach((routeStep) => {
-      //   console.log(routeStep.load)
-      //   console.log(routeStep.location)
-      // })
+    // .forEach((routeStep) => {
+    //   console.log(routeStep.load)
+    //   console.log(routeStep.location)
+    // })
 
     const mergedSteps = _.reduce(
       this.steps.filter(step => step instanceof RouteStep),

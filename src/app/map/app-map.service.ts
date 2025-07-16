@@ -6,15 +6,7 @@ import * as _ from 'lodash';
 import {Feature, FeatureCollection, GeoJSON, LineString, Point, Polygon} from 'geojson';
 import * as turf from "@turf/turf";
 import proj4 from "proj4";
-import {Vehicle} from '../models/Vehicle';
-import {ConfigService} from '../config/config.service';
-import {OidcSecurityService} from 'angular-auth-oidc-client';
-import {VroomDto} from '../models/VroomDto';
-import {VroomShipmentStepDto} from '../models/VroomShipmentStepDto';
-import {VroomJobDto} from '../models/VroomJobDto';
-import {VroomShipmentDto} from '../models/VroomShipmentDto';
 import {Shipment} from '../models/Shipment';
-import {VroomVehicleDto} from '../models/VroomVehicleDto';
 import {ScenarioOptions} from '../models/ScenarioOptions';
 
 @Injectable({
@@ -60,7 +52,6 @@ export class AppMapService {
     const shipments: Shipment[] = []
     for (let i = 0; i < scenarioOptions.randomShipmentsCount; i++) {
       let pickUpLocation
-      console.log(scenarioOptions.deliverShipmentsFromDepot, scenarioOptions.depot)
       if (scenarioOptions.deliverShipmentsFromDepot && !!scenarioOptions.depot) {
         pickUpLocation = scenarioOptions.depot
       } else {

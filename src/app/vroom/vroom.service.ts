@@ -2,14 +2,14 @@ import {Injectable} from '@angular/core';
 import {Vehicle} from '../models/Vehicle';
 import {Shipment} from '../models/Shipment';
 import {ScenarioOptions} from '../models/ScenarioOptions';
-import {VroomDto} from '../models/VroomDto';
-import {VroomShipmentDto} from '../models/VroomShipmentDto';
 import * as _ from 'lodash';
-import {VroomVehicleDto} from '../models/VroomVehicleDto';
-import {map, Observable} from 'rxjs';
+import {map, Observable, tap} from 'rxjs';
 import {Route} from '../models/Route';
 import {HttpClient} from '@angular/common/http';
 import {ConfigService} from '../config/config.service';
+import {VroomVehicleDto} from './models/VroomVehicleDto';
+import {VroomDto} from './models/VroomDto';
+import {VroomShipmentDto} from './models/VroomShipmentDto';
 
 @Injectable({
   providedIn: 'root'
@@ -82,14 +82,28 @@ export class VroomService {
     })
   }
 
-  calculateRoute(requestBody: VroomDto): Observable<Route[]> {
-    return this.httpClient.post(this.VROOM_URL, requestBody).pipe(
-      map(this.transformResponseToRoute)
-    )
-
+  sendVroomRequest(vehicles: Vehicle[], shipments: Shipment[], scenarioOptions: ScenarioOptions): Observable<Route[]> {
+    const vroomRequest = this.generateVroomRequest(vehicles, shipments, scenarioOptions)
+    return this.calculateRoute(vroomRequest)
+      .pipe(
+        map((vroomResponse) => this.transformResponseToRoute(vroomResponse, vehicles)),
+        tap((routes) => {
+          routes.forEach((route) => route.optimize())
+        })
+      )
   }
 
-  protected transformResponseToRoute(vroomResponse: any): Route[] {
-    return vroomResponse.routes.map((vroomRoute: any) => new Route(vroomRoute))
+  calculateRoute(requestBody: VroomDto): Observable<any> {
+    return this.httpClient.post(this.VROOM_URL, requestBody)
+  }
+
+  protected transformResponseToRoute(vroomResponse: any, vehicles: Vehicle[]): Route[] {
+    return vroomResponse.routes.map(
+      (vroomRoute: any) =>
+        new Route({
+          ...vroomRoute,
+          vehicle: _.find(vehicles, {id: vroomRoute.vehicle})
+        })
+    )
   }
 }

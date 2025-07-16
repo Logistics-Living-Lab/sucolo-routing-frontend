@@ -47,7 +47,7 @@
             Limit vehicle capacity per trip (max. 4 shipments)
           </mat-slide-toggle>
         </div>
-        <button mat-flat-button (click)="onScenario1Click($event)" [disabled]="!isFormValid()">
+        <button mat-flat-button (click)="onScenario1Click($event)" [disabled]="!isRouteCalculationEnabled()">
           <p>Calculate Routing</p>
         </button>
       </div>
@@ -60,9 +60,9 @@
     <div id="mapOverlayRoutes" class="flex">
       @for (route of routes; track route; let index = $index) {
         <button (click)="onRouteClicked(route)" class="map-overlay-box">
-          <p>Route {{ route.vehicle }}</p>
+          <p>Route {{ route.vehicle.id }}</p>
           <p>{{ RouteUtil.durationAsString(route.getTotalDuration()) }}h</p>
-          <img [src]="getImageSrcForVehicle(getVehicleById(route.vehicle))"/>
+          <img [src]="getImageSrcForVehicle(route.vehicle)"/>
         </button>
       }
     </div>
