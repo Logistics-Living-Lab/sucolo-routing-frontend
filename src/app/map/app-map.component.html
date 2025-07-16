@@ -1,0 +1,74 @@
+<div class="w-full h-full">
+  <mgl-map
+    #map
+    [style]="'mapbox://styles/mapbox/dark-v11'"
+    [zoom]="[12]"
+    [center]="[12.312756,51.357954]"
+    (mapClick)="onMapClick($event)"
+    (mapLoad)="onMapReady($event)"
+  >
+
+    <mgl-geojson-source
+      id="buildings"
+      [data]="buildingGeojson"
+    >
+    </mgl-geojson-source>
+    <mgl-layer
+      id="buildingsLayer"
+      type="fill-extrusion"
+      source="buildings"
+      [paint]="buildingLayerStyle.paint3d"
+    >
+    </mgl-layer>
+
+    <mgl-layer
+      id="lineArrowLayer"
+      type="symbol"
+      source="polyline"
+      [layout]="{
+          'icon-image': 'triangle',
+          'symbol-placement': 'line',
+          'icon-size': 0.7
+        }"
+      [paint]="{
+          'icon-color' : '#d1d1d1',
+          'icon-opacity' : 0.8
+        }"
+    >
+    </mgl-layer>
+
+    <mgl-geojson-source
+      id="polyline"
+      [data]="polylineData"
+      [lineMetrics]="true"
+    >
+    </mgl-geojson-source>
+    <mgl-layer
+      id="polylineLayer"
+      type="line"
+      source="polyline"
+      [paint]="polylineLayerStyle.paint"
+      [layout]="{
+                'line-cap': 'round',
+                'line-join': 'round',
+            }"
+    >
+    </mgl-layer>
+
+    <mgl-geojson-source
+      id="points"
+      [data]="polylinePoints"
+    >
+    </mgl-geojson-source>
+
+    <mgl-layer
+      id="pointLayer"
+      type="symbol"
+      source="points"
+      [layout]="pointLayerStyle.layout"
+      [paint]="pointLayerStyle.paint"
+    >
+    </mgl-layer>
+
+  </mgl-map>
+</div>

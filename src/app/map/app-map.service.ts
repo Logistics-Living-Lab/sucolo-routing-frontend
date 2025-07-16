@@ -1,9 +1,9 @@
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {Route} from '../models/Route';
-import {forkJoin, map, Observable} from 'rxjs';
+import {forkJoin, map, Observable, Subject} from 'rxjs';
 import * as _ from 'lodash';
-import {Feature, FeatureCollection, GeoJSON, Polygon} from 'geojson';
+import {Feature, FeatureCollection, GeoJSON, LineString, Point, Polygon} from 'geojson';
 import * as turf from "@turf/turf";
 import proj4 from "proj4";
 import {Vehicle} from '../models/Vehicle';
@@ -20,31 +20,19 @@ import {ScenarioOptions} from '../models/ScenarioOptions';
 @Injectable({
   providedIn: 'root'
 })
-export class MapService {
-  private readonly VROOM_URL
-  private readonly COUNT_SAMPLE_SHIPMENTS = 50
-  private readonly DEFAULT_MAX_CAPACITY = 4
+export class AppMapService {
 
   private buildingsAsGeoJson!: FeatureCollection<Polygon>
 
 
-  constructor(protected httpClient: HttpClient, configService: ConfigService) {
-    this.VROOM_URL = configService.getVroomUrl()
+  constructor(protected httpClient: HttpClient) {
+
     this.loadBuildingsAsGeoJson()
       .subscribe(buildings => this.buildingsAsGeoJson = buildings)
   }
 
   setMapLocation: EventEmitter<any> = new EventEmitter()
-
-  calculateRoute(requestBody: VroomDto): Observable<Route[]> {
-    return this.httpClient.post(this.VROOM_URL, requestBody).pipe(
-      map(this.transformResponseToRoute)
-    )
-  }
-
-  transformResponseToRoute(vroomResponse: any): Route[] {
-    return vroomResponse.routes.map((vroomRoute: any) => new Route(vroomRoute))
-  }
+  updateLayerData$: Subject<{ layerId: string, data: FeatureCollection<Point | LineString> }> = new Subject()
 
   getBuildings() {
     return this.buildingsAsGeoJson
@@ -108,65 +96,58 @@ export class MapService {
     return shipments
   }
 
-  generateVroomRequest(vehicles: Vehicle[] = [], shipments: Shipment[] = [], scenarioOptions: ScenarioOptions): VroomDto {
-    const shipmentDtos: VroomShipmentDto[] = shipments.map(shipment => {
-      return new VroomShipmentDto({
-        pickup: {
-          id: shipment.id,
-          location: shipment.pickup.coordinates,
-          description: shipment.pickup.addressName,
-          service: shipment.pickup.serviceTimeSeconds
+  transformShipmentsToGeoJsonPoints(shipments: Shipment[]): FeatureCollection<Point> {
+    return {
+      type: 'FeatureCollection',
+      features: shipments.flatMap((shipment) => {
+        return [{
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: shipment.pickup.coordinates,
+          },
+          properties: {
+            type: "pickup",
+            shipmentId: shipment.id + 1,
+          }
         },
-        delivery: {
-          id: shipment.id,
-          location: shipment.delivery.coordinates,
-          description: shipment.delivery.addressName,
-          service: shipment.delivery.serviceTimeSeconds
-        },
-        amount: [shipment.amount]
-      })
-    })
-
-    if (scenarioOptions.autoAssignTasks) {
-      vehicles.forEach(vehicle => {
-        vehicle.maxTasks = _.ceil((shipments.length * 2) / vehicles.length)
-      })
-    }
-
-    const vehicleDtos: VroomVehicleDto[] = vehicles.map(vehicle => {
-      const vehicleDto = new VroomVehicleDto({
-        id: vehicle.id,
-        start: scenarioOptions.depot?.coordinates,
-        description: `${vehicle.type} ${vehicle.id}`,
-        max_tasks: vehicle.maxTasks,
-        profile: vehicle.type,
-        speed_factor: vehicle.speedFactor,
-      })
-
-
-      return vehicleDto
-    })
-
-    if (scenarioOptions.vehicleCapacity) {
-      vehicleDtos.forEach(vehicleDto => {
-        vehicleDto.capacity = [this.DEFAULT_MAX_CAPACITY]
+          {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: shipment.delivery.coordinates,
+            },
+            properties: {
+              type: "delivery",
+              shipmentId: shipment.id + 1,
+            }
+          }
+        ]
       })
     }
-    //Remove capacity on shipments when not needed - otherwise VROOM throws error
-    else {
-      _.forEach(shipmentDtos, shipmentDto => {
-        delete shipmentDto.amount;
-      });
-    }
+  }
 
-    return new VroomDto({
-      shipments: shipmentDtos,
-      vehicles: vehicleDtos,
-      options: {
-        "g": true
+  displayShipments(shipments: Shipment[]) {
+    this.updateLayerData$.next({layerId: "points", data: this.transformShipmentsToGeoJsonPoints(shipments)})
+  }
+
+  displayRoute(route: Route, matchStreets: boolean = true) {
+    if (matchStreets) {
+      this.updateLayerData$.next({layerId: "polyline", data: route.getGeometryAsGeoJson()})
+    } else {
+      this.updateLayerData$.next({layerId: "polyline", data: route.getGeometryDirectAsGeoJson()})
+    }
+  }
+
+  resetPolyline() {
+    this.updateLayerData$.next({
+      layerId: "polyline", data: {
+        type: 'FeatureCollection',
+        features: []
       }
     })
   }
+
 
   protected loadBuildingsAsGeoJson() {
     proj4.defs("EPSG:25833", "+proj=utm +zone=33 +datum=ETRS89 +units=m +no_defs");

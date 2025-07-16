@@ -5,7 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs';
 import moment from 'moment';
 import {Route} from '../models/Route';
-import {MapService} from '../map/map.service';
+import {AppMapService} from '../map/app-map.service';
 import {RouteStep} from '../models/RouteStep';
 import {AggregatedRouteStep} from '../models/AggregatedRouteStep';
 import * as _ from "lodash";
@@ -29,12 +29,16 @@ import {MatAnchor, MatButton} from '@angular/material/button';
 })
 export class RouteDetailsComponent {
 
-  @Input()
-  route!: Route
+  @Input() route!: Route
 
   isDebugMode = false
+  protected readonly RouteUtil = RouteUtil;
 
-  constructor(protected activatedRoute: ActivatedRoute, protected httpClient: HttpClient, protected mapService: MapService) {
+  constructor(
+    protected activatedRoute: ActivatedRoute,
+    protected httpClient: HttpClient,
+    protected mapService: AppMapService
+  ) {
     this.isDebugMode = activatedRoute.snapshot.data['debug'] === true
     if (this.isDebugMode) {
       this.httpClient.get("assets/debug-data/01-dummy-route-response.json")
@@ -110,5 +114,5 @@ export class RouteDetailsComponent {
     this.mapService.setMapLocation.next(step.location)
   }
 
-  protected readonly RouteUtil = RouteUtil;
+
 }

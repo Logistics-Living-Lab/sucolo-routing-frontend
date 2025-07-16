@@ -1,8 +1,8 @@
-import {Component, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, NgZone, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import * as polyline from '@mapbox/polyline'
-import {Feature, GeoJSON, GeoJsonProperties, LineString, Point, Polygon} from 'geojson';
+import {Feature, FeatureCollection, GeoJSON, GeoJsonProperties, LineString, Point, Polygon} from 'geojson';
 import {concatMap, count, from, map, Observable, of} from 'rxjs';
 import {MapboxEvent, MapMouseEvent, Map, Expression, Anchor} from 'mapbox-gl';
 import moment from 'moment';
@@ -11,7 +11,7 @@ import * as _ from "lodash";
 import {RouteDetailsComponent} from '../route-details/route-details.component';
 import {NgForOf, NgIf} from '@angular/common';
 import {Route} from '../models/Route';
-import {MapService} from './map.service';
+import {AppMapService} from './app-map.service';
 import {FormsModule} from '@angular/forms';
 import {RouteUtil} from '../models/RouteUtil';
 import {Vehicle} from '../models/Vehicle';
@@ -27,11 +27,10 @@ import {MatSlider, MatSliderThumb} from '@angular/material/slider';
 import {MatInput} from '@angular/material/input';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
-import {VehicleFormButtonComponent} from './vehicle-form-button/vehicle-form-button.component';
 import {MatDivider} from '@angular/material/divider';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-map',
   imports: [
     RouteDetailsComponent,
     NgIf,
@@ -51,58 +50,34 @@ import {MatDivider} from '@angular/material/divider';
     MatButton,
     MatIconButton,
     MatIcon,
-    VehicleFormButtonComponent,
     MatDivider
   ],
-  templateUrl: './map.component.html',
-  styleUrl: './map.component.css'
+  templateUrl: './app-map.component.html',
+  styleUrl: './app-map.component.css'
 })
-export class SuCoLoMapComponent implements OnInit, OnDestroy {
-  map!: Map;
+export class AppMapComponent implements OnInit, OnDestroy {
+  title = 'sucolo-routing-frontend';
 
-  matchStreets: boolean = true
-  shipmentsToGenerate: number = 10
-  shipments: Shipment[] = []
+  @ViewChild(AppMapComponent) mapComponent!: AppMapComponent;
+  @Output() mapReady = new EventEmitter<Map>
 
-  scenarioOptions = new ScenarioOptions({})
+  map!: Map
 
-  readonly depots: Depot[] = [
-    new Depot({
-      id: 1,
-      name: "Lützschena FULMO Micro-Hub",
-      addressName: "Elsterberg 6-10, 04159 Leipzig",
-      coordinates: [
-        12.271092975398838,
-        51.383806427138865,
-      ] as [number, number]
-    }),
-    new Depot({
-      id: 2,
-      name: "FULMO Plagwitz Depot",
-      addressName: "Klingenstraße 22, 04229 Leipzig",
-      coordinates: [
-        12.324161,
-        51.322871
-      ] as [number, number]
-    }),
+  constructor(protected mapService: AppMapService, protected zone: NgZone, protected oidcSecurityService: OidcSecurityService) {
+  }
 
-  ]
-
-  constructor(protected mapService: MapService, protected zone: NgZone, protected oidcSecurityService: OidcSecurityService) {
+  ngOnInit(): void {
+    this.mapService.setMapLocation.subscribe(
+      (location: any) => this.onNewMapLocationReceived(location)
+    )
+    this.mapService.updateLayerData$.subscribe((event) => this.onUpdateLayerData(event.layerId, event.data))
   }
 
   ngOnDestroy(): void {
     this.mapService.setMapLocation.unsubscribe()
+    this.mapService.updateLayerData$.unsubscribe()
   }
 
-  ngOnInit(): void {
-    this.scenarioOptions.depot = this.depots[0]
-    this.mapService.setMapLocation.subscribe(
-      (location: any) => this.onNewMapLocationReceived(location)
-    )
-  }
-
-  title = 'sucolo-routing-frontend';
   polylineData: GeoJSON.FeatureCollection<LineString> | undefined = {
     type: 'FeatureCollection',
     features: [{
@@ -222,14 +197,6 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
 
   buildingGeojson!: GeoJSON.FeatureCollection<Polygon>
 
-  vehicles: Vehicle[] = [
-    new Vehicle({id: 1, type: "bike"}),
-  ]
-
-  routes: Route[] = []
-  route: Route | null = null
-
-
   buildingLayerStyle = {
     paint3d: {
 
@@ -256,12 +223,11 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
   onMapClick($event: MapMouseEvent) {
     $event.preventDefault()
     $event.originalEvent.stopPropagation()
-
   }
-
 
   onMapReady(event: MapboxEvent) {
     this.map = event.target
+    this.buildingGeojson = this.mapService.getBuildings()
     of(['package', 'triangle'])
       .pipe(
         concatMap((iconNames: string[]) => {
@@ -280,15 +246,14 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
         },
         complete: () => {
           console.log('All icons loaded');
+          console.log("Map is ready")
+          this.mapReady.emit(this.map)
         }
       })
-
-    this.buildingGeojson = this.mapService.getBuildings()
   }
 
   loadIcon(iconName: string) {
     return new Observable<void>((observer) => {
-      console.log(iconName)
       this.map.loadImage(`assets/${iconName}.png`, (error, image) => {
         if (error) {
           observer.error(error);
@@ -306,20 +271,6 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
     });
   }
 
-  onScenario1Click($event: MouseEvent) {
-    this.sendRouteRequest(this.mapService.generateVroomRequest(this.vehicles, this.shipments, this.scenarioOptions), !this.matchStreets)
-  }
-
-  protected sendRouteRequest(requestBody: any, directLine = false) {
-    this.mapService.calculateRoute(requestBody)
-      .subscribe((routes) => {
-        //Only first route at the moment
-        routes.forEach((route) => route.optimize())
-        this.routes = routes
-        this.updateSelectedRoute(this.routes[0])
-      })
-  }
-
   private onNewMapLocationReceived(coordinates: any) {
     this.map.flyTo({
       center: coordinates as [number, number],
@@ -327,106 +278,16 @@ export class SuCoLoMapComponent implements OnInit, OnDestroy {
     })
   }
 
-  onMatchStreetsChanged($event: any) {
-    console.log(this.matchStreets)
-  }
-
-  protected readonly RouteUtil = RouteUtil;
-
-  updateSelectedRoute(route: Route | null) {
-    this.route = route
-    if (route) {
-      if (this.matchStreets) {
-        this.polylineData = route.getGeometryAsGeoJson()
-      } else {
-        this.polylineData = route.getGeometryDirectAsGeoJson()
+  private onUpdateLayerData(layerId: string, data: FeatureCollection<Point | LineString>) {
+    switch (layerId) {
+      case "points":
+        this.polylinePoints = data as FeatureCollection<Point>
+        break
+      case "polyline": {
+        this.polylineData = data as FeatureCollection<LineString>
+        break
       }
-    } else {
-      this.polylineData = {
-        type: 'FeatureCollection',
-        features: []
-      };
-    }
-    // this.polylinePoints = route.getStepsAsGeoJsonFeatures()
-  }
-
-  onRouteClicked(route: Route) {
-    this.updateSelectedRoute(route)
-  }
-
-  getImageSrcForVehicle(vehicle: Vehicle | undefined) {
-    if (vehicle?.type === "bike") {
-      return "assets/cargo-bike.png"
-    }
-    if (vehicle?.type === "car") {
-      return "assets/delivery.png"
-    }
-    return null
-  }
-
-  onVehicleAdd(type: 'car' | 'bike') {
-    this.vehicles.push(new Vehicle({
-      id: this.vehicles.length + 1,
-      type: type
-    }))
-  }
-
-  getVehicleById(id: number) {
-    return _.find(this.vehicles, {id: id})
-  }
-
-  getVehicleByType(type: string) {
-    return _.filter(this.vehicles, {type: type})
-  }
-
-  onVehicleRemove(type: string) {
-    const lastVehicle: Vehicle | undefined = _.findLast(this.vehicles, {type: type}) as Vehicle | undefined
-    if (lastVehicle) {
-      _.remove(this.vehicles, {id: lastVehicle.id})
     }
   }
 
-  onGenerateShipmentsClick($event: MouseEvent) {
-    this.updateSelectedRoute(null)
-    this.routes = []
-
-    this.shipments = this.mapService.generateShipments(this.scenarioOptions)
-    this.polylinePoints = {
-      type: 'FeatureCollection',
-      features: this.shipments.flatMap((shipment) => {
-        return [{
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: shipment.pickup.coordinates,
-          },
-          properties: {
-            type: "pickup",
-            shipmentId: shipment.id + 1,
-          }
-        },
-          {
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: shipment.delivery.coordinates,
-            },
-            properties: {
-              type: "delivery",
-              shipmentId: shipment.id + 1,
-            }
-          }
-        ]
-      })
-    }
-  }
-
-  isFormValid() {
-    return !_.isEmpty(this.scenarioOptions.depot) && !_.isEmpty(this.shipments)
-  }
-
-  resetRoute() {
-    this.routes = []
-    this.route = null
-  }
 }
