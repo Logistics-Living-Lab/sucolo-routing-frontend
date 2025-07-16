@@ -112,7 +112,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   onMapReady() {
-    
+
   }
 
   onScenario1Click($event: MouseEvent) {
@@ -130,7 +130,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   onMatchStreetsChanged($event: any) {
-
+    if (this.selectedRoute) {
+      this.mapService.displayRoute(this.selectedRoute, this.matchStreets)
+    }
   }
 
   onRouteClicked(route: Route) {
