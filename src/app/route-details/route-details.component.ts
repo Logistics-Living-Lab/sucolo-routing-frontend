@@ -114,5 +114,4 @@ export class RouteDetailsComponent {
     this.mapService.setMapLocation.next(step.location)
   }
 
-
 }

@@ -131,7 +131,7 @@ export class AppMapComponent implements OnInit, OnDestroy {
       'icon-color': [
         'match',
         ['get', 'type'],
-        'start', '#ff0000',
+        'start', '#98FF98',
         'pickup', '#FE53BB',
         'delivery', '#FCFF03',
         'job', '#FCFF03',
@@ -142,12 +142,13 @@ export class AppMapComponent implements OnInit, OnDestroy {
       'text-halo-width': 1.5,
     },
     layout: {
-      'icon-image': [
-        'match',
-        ['get', 'type'],
-        'start', 'bicycle',
-        'triangle'
-      ] as Expression,
+      'icon-image': 'triangle',
+      // 'icon-image': [
+      //   // 'match',
+      //   // ['get', 'type'],
+      //   // 'start', 'bicycle',
+      //   'triangle'
+      // ] as Expression,
       'icon-size': 0.8,
       'icon-rotate': [
         'match',
@@ -155,35 +156,9 @@ export class AppMapComponent implements OnInit, OnDestroy {
         'delivery', 90,
         'job', 90,
         'pickup', -90,
-        0
+        -90
       ] as Expression,
-      'text-field': [
-        'match',
-        ['get', 'type'],
-        'start', 'Start',
-        ['concat',
-          ['case',
-            ['all', ['has', 'stopIndex'], ['!=', ['get', 'stopIndex'], '']],
-            ['concat', 'Stop: ', ['get', 'stopIndex'], '\n'],
-            ''
-          ],
-          ['case',
-            ['all', ['has', 'shipmentId'], ['!=', ['get', 'shipmentId'], '']],
-            ['concat', 'Shipment: ', ['get', 'shipmentId'], '\n'],
-            ''
-          ],
-          ['case',
-            ['all', ['has', 'distance'], ['!=', ['get', 'distance'], '']],
-            ['concat', 'Distance: ', ['get', 'distance'], 'km\n'],
-            ''
-          ],
-          ['case',
-            ['all', ['has', 'eta'], ['!=', ['get', 'eta'], '']],
-            ['concat', 'ETA: ', ['get', 'eta']],
-            ''
-          ]
-        ]
-      ] as Expression,
+      'text-field': ['get', 'description'] as Expression,
       'text-size': 16,
       'text-font': ['Open Sans Bold'],
       'text-offset': [0, 2],
@@ -192,6 +167,7 @@ export class AppMapComponent implements OnInit, OnDestroy {
       'text-ignore-placement': true,
       'icon-allow-overlap': true,
       'text-allow-overlap': true,
+      'text-max-width': 100
     }
   }
 
@@ -239,7 +215,6 @@ export class AppMapComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: () => {
-          console.log('Icon loaded');
         },
         error: (err) => {
           console.error('Error loading icons', err);

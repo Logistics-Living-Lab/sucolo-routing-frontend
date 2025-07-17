@@ -31,6 +31,7 @@ import {MatDivider} from '@angular/material/divider';
 import {AppMapService} from '../map/app-map.service';
 import {AppMapComponent} from '../map/app-map.component';
 import {VroomService} from '../vroom/vroom.service';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-root',
@@ -48,7 +49,8 @@ import {VroomService} from '../vroom/vroom.service';
     MatSliderThumb,
     MatButton,
     VehicleFormButtonComponent,
-    AppMapComponent
+    AppMapComponent,
+    MatProgressSpinner,
   ],
   templateUrl: './map-viewer.component.html',
   styleUrl: './map-viewer.component.css'
@@ -62,11 +64,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   selectedRoute: Route | undefined
   vehicles: Vehicle[] = []
   scenarioOptions = new ScenarioOptions({})
+  isCalculatingRoute: boolean = false
 
   readonly depots: Depot[] = [
     new Depot({
       id: 1,
-      name: "Lützschena FULMO Micro-Hub",
+      name: "FULMO Lützschena Micro-Hub",
       addressName: "Elsterberg 6-10, 04159 Leipzig",
       coordinates: [
         12.271092975398838,
@@ -82,10 +85,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         51.322871
       ] as [number, number]
     }),
-
   ]
 
   protected readonly RouteUtil = RouteUtil;
+
 
   constructor(
     protected mapService: AppMapService,
@@ -100,7 +103,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.scenarioOptions.depot = this.depots[0]
-
+    this.onVehicleAdd("bike")
   }
 
   onMapReady() {
@@ -108,17 +111,24 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   onScenario1Click($event: MouseEvent) {
+    this.isCalculatingRoute = true
     this.vroomService.sendVroomRequest(this.vehicles, this.shipments, this.scenarioOptions)
-      .subscribe((routes) => {
-        this.routes = routes
-        //Only first route at the moment
-        this.updateSelectedRoute(this.routes[0])
+      .subscribe({
+        next: (routes) => {
+          this.routes = routes
+          //Only first route at the moment
+          this.updateSelectedRoute(this.routes[0])
+        },
+        error: (error) => {
+          console.error(error)
+        },
+        complete: () => this.isCalculatingRoute = false
       })
   }
 
   onMatchStreetsChanged($event: any) {
     if (this.selectedRoute) {
-      this.mapService.displayRoute(this.selectedRoute, this.matchStreets)
+      this.mapService.displayRoute(this.selectedRoute, this.matchStreets, this.scenarioOptions.deliverShipmentsFromDepot)
     }
   }
 
@@ -129,7 +139,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   updateSelectedRoute(route: Route | undefined) {
     this.selectedRoute = route
     if (route) {
-      this.mapService.displayRoute(route, this.matchStreets)
+      this.mapService.displayRoute(route, this.matchStreets, this.scenarioOptions.deliverShipmentsFromDepot)
     } else {
       this.mapService.resetPolyline()
     }
@@ -171,15 +181,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.updateSelectedRoute(undefined)
     this.routes = []
     this.shipments = this.mapService.generateShipments(this.scenarioOptions)
-    this.mapService.displayShipments(this.shipments)
+    this.mapService.displayShipments(this.shipments, this.scenarioOptions.deliverShipmentsFromDepot)
   }
 
   isRouteCalculationEnabled() {
-    return !_.isEmpty(this.scenarioOptions.depot) && !_.isEmpty(this.shipments) && this.vehicles.length > 0
-  }
-
-  resetRoute() {
-    this.routes = []
-    this.selectedRoute = undefined
+    return !_.isEmpty(this.scenarioOptions.depot)
+      && !_.isEmpty(this.shipments)
+      && this.vehicles.length > 0
+      && !this.isCalculatingRoute
   }
 }

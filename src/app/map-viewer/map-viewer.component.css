@@ -21,3 +21,10 @@ app-map {
   @apply py-4 px-4 rounded-lg m-2 bg-gray-600 text-white
 }
 
+mat-spinner {
+  margin-right: 8px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+

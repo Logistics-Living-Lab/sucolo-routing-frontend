@@ -3,7 +3,7 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {Route} from '../models/Route';
 import {forkJoin, map, Observable, Subject} from 'rxjs';
 import * as _ from 'lodash';
-import {Feature, FeatureCollection, GeoJSON, LineString, Point, Polygon} from 'geojson';
+import {Feature, FeatureCollection, GeoJSON, GeoJsonProperties, LineString, Point, Polygon} from 'geojson';
 import * as turf from "@turf/turf";
 import proj4 from "proj4";
 import {Shipment} from '../models/Shipment';
@@ -87,47 +87,87 @@ export class AppMapService {
     return shipments
   }
 
-  transformShipmentsToGeoJsonPoints(shipments: Shipment[]): FeatureCollection<Point> {
-    return {
-      type: 'FeatureCollection',
-      features: shipments.flatMap((shipment) => {
-        return [{
+  transformShipmentsToGeoJsonPoints(shipments: Shipment[], aggregatePickup: boolean = false): FeatureCollection<Point> {
+    const deliveryFeatures: Feature<Point, GeoJsonProperties>[] = shipments.flatMap((shipment) => {
+      return [
+        {
           type: "Feature",
           geometry: {
             type: "Point",
-            coordinates: shipment.pickup.coordinates,
+            coordinates: shipment.delivery.coordinates,
           },
           properties: {
-            type: "pickup",
-            shipmentId: shipment.id + 1,
+            type: "delivery",
+            description: `Shipment ${shipment.id + 1}\n${shipment.delivery.addressName}`,
           }
+        }
+      ]
+    })
+
+    let pickupFeatures: Feature<Point, GeoJsonProperties>[] = []
+    if (aggregatePickup) {
+      pickupFeatures = [{
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: shipments[0].pickup.coordinates,
         },
+        properties: {
+          type: "pickup",
+          description: shipments[0].pickup.addressName
+        }
+      }]
+    } else {
+      pickupFeatures = shipments.flatMap((shipment) => {
+        return [
           {
             type: "Feature",
             geometry: {
               type: "Point",
-              coordinates: shipment.delivery.coordinates,
+              coordinates: shipment.pickup.coordinates,
             },
             properties: {
-              type: "delivery",
-              shipmentId: shipment.id + 1,
+              type: "pickup",
+              description: `Shipment ${shipment.id + 1}\n${shipment.pickup.addressName}`,
             }
           }
         ]
       })
     }
+    return {
+      type: 'FeatureCollection',
+      features: _.concat(pickupFeatures, deliveryFeatures)
+    }
   }
 
-  displayShipments(shipments: Shipment[]) {
-    this.updateLayerData$.next({layerId: "points", data: this.transformShipmentsToGeoJsonPoints(shipments)})
+  displayShipments(shipments: Shipment[], aggregatePickUp: boolean = false) {
+    this.updateLayerData$.next({
+      layerId: "points",
+      data: this.transformShipmentsToGeoJsonPoints(shipments, aggregatePickUp)
+    })
   }
 
-  displayRoute(route: Route, matchStreets: boolean = true) {
+  displayRoute(route: Route, matchStreets: boolean = true, aggregatePickUp: boolean = false) {
+    const routeStepsGeoJson = route.getStepsAsGeoJsonFeatures()
+
+    //Remove pickups for displaying Route that only picks up in depot
+    if (aggregatePickUp) {
+      routeStepsGeoJson.features = _.filter(routeStepsGeoJson.features, (routeStep: Feature) => {
+        return _.get(routeStep, "properties.type") !== "pickup"
+      })
+    }
+
+    this.updateLayerData$.next({
+      layerId: "points",
+      data: routeStepsGeoJson
+    })
+
     if (matchStreets) {
       this.updateLayerData$.next({layerId: "polyline", data: route.getGeometryAsGeoJson()})
     } else {
       this.updateLayerData$.next({layerId: "polyline", data: route.getGeometryDirectAsGeoJson()})
     }
+
   }
 
   resetPolyline() {
