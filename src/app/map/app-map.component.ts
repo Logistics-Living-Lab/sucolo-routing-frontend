@@ -95,6 +95,7 @@ export class AppMapComponent implements OnInit, OnDestroy {
         'match',
         ['get', 'type'],
         'start', '#98FF98',
+        'end', '#FF7F50',
         'pickup', '#FE53BB',
         'delivery', '#FCFF03',
         'job', '#FCFF03',

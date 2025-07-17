@@ -149,7 +149,9 @@ export class AppMapService {
 
   displayRoute(route: Route, matchStreets: boolean = true, aggregatePickUp: boolean = false) {
     const routeStepsGeoJson = route.getStepsAsGeoJsonFeatures()
-
+    routeStepsGeoJson.features = _.filter(routeStepsGeoJson.features, (routeStep: Feature) => {
+      return _.get(routeStep, "properties.type") !== "end"
+    })
     //Remove pickups for displaying Route that only picks up in depot
     if (aggregatePickUp) {
       routeStepsGeoJson.features = _.filter(routeStepsGeoJson.features, (routeStep: Feature) => {
