@@ -87,7 +87,7 @@ export class RouteDetailsComponent {
 
   getHeaderForStep(step: any) {
     if (step instanceof AggregatedRouteStep) {
-      return `Shipments: ` + _.join(step.routeSteps?.map(routeStep => routeStep.id + 1), ", ")
+      return `Pick Up - Shipments: ` + _.join(step.routeSteps?.map(routeStep => routeStep.id + 1), ", ")
     }
     switch (step.type) {
       case 'start' :

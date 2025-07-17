@@ -79,7 +79,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   protected readonly RouteUtil = RouteUtil;
 
-
   constructor(
     protected mapService: AppMapService,
     protected zone: NgZone,
@@ -100,7 +99,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   }
 
-  onScenario1Click($event: MouseEvent) {
+  onCalculateRouteClick($event: MouseEvent) {
     this.isCalculatingRoute = true
     this.vroomService.sendVroomRequest(this.vehicles, this.shipments, this.scenarioOptions)
       .subscribe({
@@ -180,7 +179,4 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       && this.vehicles.length > 0
       && !this.isCalculatingRoute
   }
-
-  protected readonly Date = Date;
-  protected readonly moment = moment;
 }
