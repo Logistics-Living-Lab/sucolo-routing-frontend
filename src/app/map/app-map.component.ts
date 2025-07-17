@@ -1,56 +1,19 @@
 import {Component, EventEmitter, NgZone, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {RouterOutlet} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import * as polyline from '@mapbox/polyline'
-import {Feature, FeatureCollection, GeoJSON, GeoJsonProperties, LineString, Point, Polygon} from 'geojson';
-import {concatMap, count, from, map, Observable, of} from 'rxjs';
-import {MapboxEvent, MapMouseEvent, Map, Expression, Anchor} from 'mapbox-gl';
-import moment from 'moment';
-import * as _ from "lodash";
-
-import {RouteDetailsComponent} from '../route-details/route-details.component';
-import {NgForOf, NgIf} from '@angular/common';
-import {Route} from '../models/Route';
+import {FeatureCollection, GeoJSON, LineString, Point, Polygon} from 'geojson';
+import {concatMap, from, Observable, of} from 'rxjs';
+import {Anchor, Expression, Map, MapboxEvent, MapMouseEvent} from 'mapbox-gl';
 import {AppMapService} from './app-map.service';
 import {FormsModule} from '@angular/forms';
-import {RouteUtil} from '../models/RouteUtil';
-import {Vehicle} from '../models/Vehicle';
 import {GeoJSONSourceComponent, LayerComponent, MapComponent} from 'ngx-mapbox-gl';
 import {OidcSecurityService} from 'angular-auth-oidc-client';
-import {Shipment} from '../models/Shipment';
-import {ScenarioOptions} from '../models/ScenarioOptions';
-import {Depot} from '../models/Depot';
-import {MatFormField, MatLabel} from '@angular/material/form-field';
-import {MatOption, MatSelect, MatSelectTrigger} from '@angular/material/select';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {MatSlider, MatSliderThumb} from '@angular/material/slider';
-import {MatInput} from '@angular/material/input';
-import {MatButton, MatIconButton} from '@angular/material/button';
-import {MatIcon} from '@angular/material/icon';
-import {MatDivider} from '@angular/material/divider';
 
 @Component({
   selector: 'app-map',
   imports: [
-    RouteDetailsComponent,
-    NgIf,
     FormsModule,
     MapComponent,
     GeoJSONSourceComponent,
-    LayerComponent,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatSelectTrigger,
-    MatOption,
-    MatSlideToggle,
-    MatSlider,
-    MatSliderThumb,
-    MatInput,
-    MatButton,
-    MatIconButton,
-    MatIcon,
-    MatDivider
+    LayerComponent
   ],
   templateUrl: './app-map.component.html',
   styleUrl: './app-map.component.css'

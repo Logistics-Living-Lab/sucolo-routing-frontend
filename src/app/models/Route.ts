@@ -1,6 +1,6 @@
 import {RouteStep} from './RouteStep';
 import * as polyline from '@mapbox/polyline';
-import {FeatureCollection, GeoJSON, LineString, Point} from 'geojson';
+import {FeatureCollection, LineString, Point} from 'geojson';
 import {AggregatedRouteStep} from './AggregatedRouteStep';
 import * as _ from "lodash";
 import {Vehicle} from './Vehicle';

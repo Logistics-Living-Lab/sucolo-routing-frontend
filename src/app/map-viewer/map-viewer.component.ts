@@ -1,33 +1,22 @@
-import {Component, NgZone, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {RouterOutlet} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import * as polyline from '@mapbox/polyline'
-import {Feature, GeoJSON, GeoJsonProperties, LineString, Point, Polygon} from 'geojson';
-import {concatMap, count, from, map, Observable, of} from 'rxjs';
-import {MapboxEvent, MapMouseEvent, Map, Expression, Anchor} from 'mapbox-gl';
-import moment from 'moment';
+import {Component, NgZone, OnDestroy, OnInit} from '@angular/core';
+import {Map} from 'mapbox-gl';
 import * as _ from "lodash";
 
 import {RouteDetailsComponent} from '../route-details/route-details.component';
-import {NgForOf, NgIf} from '@angular/common';
+import {NgIf} from '@angular/common';
 import {Route} from '../models/Route';
 import {FormsModule} from '@angular/forms';
 import {RouteUtil} from '../models/RouteUtil';
 import {Vehicle} from '../models/Vehicle';
-import {GeoJSONSourceComponent, LayerComponent, MapComponent} from 'ngx-mapbox-gl';
-import {OidcSecurityService} from 'angular-auth-oidc-client';
 import {Shipment} from '../models/Shipment';
 import {ScenarioOptions} from '../models/ScenarioOptions';
 import {Depot} from '../models/Depot';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
-import {MatOption, MatSelect, MatSelectTrigger} from '@angular/material/select';
+import {MatOption, MatSelect} from '@angular/material/select';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatSlider, MatSliderThumb} from '@angular/material/slider';
-import {MatInput} from '@angular/material/input';
-import {MatButton, MatIconButton} from '@angular/material/button';
-import {MatIcon} from '@angular/material/icon';
+import {MatButton} from '@angular/material/button';
 import {VehicleFormButtonComponent} from './vehicle-form-button/vehicle-form-button.component';
-import {MatDivider} from '@angular/material/divider';
 import {AppMapService} from '../map/app-map.service';
 import {AppMapComponent} from '../map/app-map.component';
 import {VroomService} from '../vroom/vroom.service';

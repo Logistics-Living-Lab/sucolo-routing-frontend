@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { VehicleFormButtonComponent } from './vehicle-form-button.component';
+import {VehicleFormButtonComponent} from './vehicle-form-button.component';
 
 describe('VehicleFormButtonComponent', () => {
   let component: VehicleFormButtonComponent;

@@ -1,5 +1,5 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {DecimalPipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
+import {Component, Input} from '@angular/core';
+import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs';
@@ -11,18 +11,14 @@ import {AggregatedRouteStep} from '../models/AggregatedRouteStep';
 import * as _ from "lodash";
 import {RouteUtil} from '../models/RouteUtil';
 import {MatIcon} from '@angular/material/icon';
-import {MatAnchor, MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-route-details',
   imports: [
-    JsonPipe,
     NgIf,
     NgForOf,
     DecimalPipe,
-    MatIcon,
-    MatButton,
-    MatAnchor
+    MatIcon
   ],
   templateUrl: './route-details.component.html',
   styleUrl: './route-details.component.css'

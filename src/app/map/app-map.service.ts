@@ -1,9 +1,9 @@
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {Route} from '../models/Route';
-import {forkJoin, map, Observable, Subject} from 'rxjs';
+import {forkJoin, map, Subject} from 'rxjs';
 import * as _ from 'lodash';
-import {Feature, FeatureCollection, GeoJSON, GeoJsonProperties, LineString, Point, Polygon} from 'geojson';
+import {Feature, FeatureCollection, GeoJsonProperties, LineString, Point, Polygon} from 'geojson';
 import * as turf from "@turf/turf";
 import proj4 from "proj4";
 import {Shipment} from '../models/Shipment';

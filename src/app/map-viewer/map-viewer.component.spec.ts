@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { MapViewerComponent } from './map-viewer.component';
+import {MapViewerComponent} from './map-viewer.component';
 
 describe('MapViewerComponent', () => {
   let component: MapViewerComponent;

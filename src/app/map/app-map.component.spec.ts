@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { AppMapComponent } from './app-map.component';
+import {AppMapComponent} from './app-map.component';
 
 describe('MapComponent', () => {
   let component: AppMapComponent;

@@ -1,6 +1,5 @@
 import {Routes} from '@angular/router';
 import {RouteDetailsComponent} from './route-details/route-details.component';
-import {AppMapComponent} from './map/app-map.component';
 import {autoLoginPartialRoutesGuard} from 'angular-auth-oidc-client';
 import {AuthCallbackComponent} from './auth/auth-callback.component';
 import {MapViewerComponent} from './map-viewer/map-viewer.component';

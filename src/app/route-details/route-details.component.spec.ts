@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { RouteDetailsComponent } from './route-details.component';
+import {RouteDetailsComponent} from './route-details.component';
 
 describe('RouteDetailsComponent', () => {
   let component: RouteDetailsComponent;
