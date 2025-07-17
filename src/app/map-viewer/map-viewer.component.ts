@@ -21,6 +21,7 @@ import {AppMapService} from '../map/app-map.service';
 import {AppMapComponent} from '../map/app-map.component';
 import {VroomService} from '../vroom/vroom.service';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import moment from 'moment';
 
 @Component({
   selector: 'app-root',
@@ -179,4 +180,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       && this.vehicles.length > 0
       && !this.isCalculatingRoute
   }
+
+  protected readonly Date = Date;
+  protected readonly moment = moment;
 }

@@ -1,5 +1,5 @@
 <div class="w-screen h-screen flex">
-  <div class="flex-1 w-3/4">
+  <div class="flex flex-col flex-1 w-3/4">
     <div id="mapOverlay" class="flex items-start">
       <div class="map-overlay-box w-[500px] h-[270px] flex flex-1 justify-center flex-col gap-4">
         <div class="flex flex-1 justify-center gap-4">
@@ -70,7 +70,25 @@
         </button>
       }
     </div>
-    <app-map (mapReady)="onMapReady()"></app-map>
+    <div id="mapContainer" class="flex-1">
+      <app-map (mapReady)="onMapReady()"></app-map>
+    </div>
+
   </div>
   <app-route-details *ngIf="selectedRoute" class="w-1/4 overflow-y-auto" [route]="selectedRoute"/>
 </div>
+<!--<div class="flex items-center bg-white h-32">-->
+<!--  <div class="flex flex-row items-center w-2/3 bg-green-100">-->
+<!--    <div class="flex items-center">-->
+<!--      <img src="assets/logo-banner.png"/>-->
+<!--    </div>-->
+<!--    <div class="flex flex-col items-center p-10">-->
+<!--      <a href="https://sucolo.eu/" target="_blank">SuCoLo Project Website </a>-->
+<!--      &copy; {{ moment().format("Y") }} Logistics Living Lab - Leipzig University-->
+<!--      <div>This project has been funded by the FFG, MIMIT, BMFTR and Vinnova under the Driving Urban Transitions-->
+<!--        Partnership, which has been co-funded by the European Union under grant agreement no. 905465 and BMFTR (FKZ-->
+<!--        01UV2450).-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->

@@ -101,9 +101,11 @@ export class AppMapComponent implements OnInit, OnDestroy {
         'job', '#FCFF03',
         '#000000'
       ] as Expression,
-      'text-color': '#000000',
-      'text-halo-color': '#ffffff',
-      'text-halo-width': 1.5,
+      // 'text-color': '#00FFFF',
+      'text-color': '#ffffff',
+      // 'text-color': '#ffffff',
+      'text-halo-color': '#000000',
+      'text-halo-width': 1.0,
     },
     layout: {
       'icon-image': 'triangle',
