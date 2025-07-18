@@ -64,18 +64,22 @@
         <h1 class="mb-2">Quick Select</h1>
         <div class="flex flex-row gap-4">
           <div class="flex flex-col gap-4">
-            <button mat-button mat-flat-button class="scenario-btn" (click)="onScenario1Click()">
+            <button mat-button mat-flat-button class="scenario-btn" (click)="onScenario1Click()"
+                    [disabled]="isCalculatingRoute">
               <p>Deliver from Plagwitz Depot</p>
             </button>
-            <button mat-flat-button class="scenario-btn" (click)="onScenario2Click()">
+            <button mat-flat-button class="scenario-btn" (click)="onScenario2Click()"
+                    [disabled]="isCalculatingRoute">
               <p>Deliver from Micro-Hub</p>
             </button>
           </div>
           <div class="flex flex-col gap-4">
-            <button mat-flat-button class="scenario-btn" (click)="onScenario3Click()">
+            <button mat-flat-button class="scenario-btn" (click)="onScenario3Click()"
+                    [disabled]="isCalculatingRoute">
               <p>PickUp & Deliver in Lützschena</p>
             </button>
-            <button mat-flat-button class="scenario-btn" (click)="onScenario4Click()">
+            <button mat-flat-button class="scenario-btn" (click)="onScenario4Click()"
+                    [disabled]="isCalculatingRoute">
               <p>Multiple Vehicles / Limited Capacity</p>
             </button>
           </div>
