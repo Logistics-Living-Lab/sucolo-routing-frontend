@@ -3,7 +3,7 @@ import {Depot} from './Depot';
 export class ScenarioOptions {
   depot: Depot | undefined
   deliverShipmentsFromDepot: boolean = true
-  vehicleCapacity: number | undefined
+  vehicleCapacity: boolean = false
   autoAssignTasks: boolean = true
   randomShipmentsCount = 10
 

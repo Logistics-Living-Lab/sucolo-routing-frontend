@@ -60,6 +60,27 @@
           Match streets
         </mat-slide-toggle>
       </div>
+      <div class="map-overlay-box flex flex-col items-center">
+        <h1 class="mb-2">Quick Select</h1>
+        <div class="flex flex-row gap-4">
+          <div class="flex flex-col gap-4">
+            <button mat-button mat-flat-button class="scenario-btn" (click)="onScenario1Click()">
+              <p>Deliver from Plagwitz Depot</p>
+            </button>
+            <button mat-flat-button class="scenario-btn" (click)="onScenario2Click()">
+              <p>Deliver from Micro-Hub</p>
+            </button>
+          </div>
+          <div class="flex flex-col gap-4">
+            <button mat-flat-button class="scenario-btn" (click)="onScenario3Click()">
+              <p>PickUp & Deliver in Lützschena</p>
+            </button>
+            <button mat-flat-button class="scenario-btn" (click)="onScenario4Click()">
+              <p>Multiple Vehicles / Limited Capacity</p>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
     <div id="mapOverlayRoutes" class="flex">
       @for (route of routes; track route; let index = $index) {

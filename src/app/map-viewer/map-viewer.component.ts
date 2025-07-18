@@ -99,7 +99,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   }
 
-  onCalculateRouteClick($event: MouseEvent) {
+  onCalculateRouteClick($event: MouseEvent | undefined) {
     this.isCalculatingRoute = true
     this.vroomService.sendVroomRequest(this.vehicles, this.shipments, this.scenarioOptions)
       .subscribe({
@@ -166,7 +166,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     }
   }
 
-  onGenerateShipmentsClick($event: MouseEvent) {
+  onGenerateShipmentsClick($event: MouseEvent | undefined) {
     this.updateSelectedRoute(undefined)
     this.routes = []
     this.shipments = this.mapService.generateShipments(this.scenarioOptions)
@@ -179,4 +179,57 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       && this.vehicles.length > 0
       && !this.isCalculatingRoute
   }
+
+  onScenario1Click() {
+    this.scenarioOptions.deliverShipmentsFromDepot = true
+    this.scenarioOptions.vehicleCapacity = false
+    this.scenarioOptions.autoAssignTasks = true
+    this.scenarioOptions.depot = this.depots[1]
+    this.vehicles = []
+    this.onVehicleAdd("bike")
+    this.onGenerateShipmentsClick(undefined)
+    this.onCalculateRouteClick(undefined)
+  }
+
+  onScenario2Click() {
+    this.scenarioOptions.deliverShipmentsFromDepot = true
+    this.scenarioOptions.vehicleCapacity = false
+    this.scenarioOptions.autoAssignTasks = true
+    this.scenarioOptions.depot = this.depots[0]
+
+    this.vehicles = []
+    this.onVehicleAdd("bike")
+    this.onGenerateShipmentsClick(undefined)
+    this.onCalculateRouteClick(undefined)
+  }
+
+  onScenario3Click() {
+    this.scenarioOptions.deliverShipmentsFromDepot = false
+    this.scenarioOptions.vehicleCapacity = false
+    this.scenarioOptions.autoAssignTasks = true
+    this.scenarioOptions.depot = this.depots[0]
+
+    this.vehicles = []
+    this.onVehicleAdd("bike")
+    this.onGenerateShipmentsClick(undefined)
+    this.onCalculateRouteClick(undefined)
+  }
+
+  onScenario4Click() {
+    this.scenarioOptions.deliverShipmentsFromDepot = true
+    this.scenarioOptions.vehicleCapacity = true
+    this.scenarioOptions.autoAssignTasks = true
+    this.scenarioOptions.depot = this.depots[0]
+
+    this.vehicles = []
+    this.onVehicleAdd("bike")
+    this.onVehicleAdd("bike")
+    this.onVehicleAdd("bike")
+    this.onVehicleAdd("car")
+    this.onVehicleAdd("car")
+    this.onGenerateShipmentsClick(undefined)
+    this.onCalculateRouteClick(undefined)
+  }
+
+
 }
