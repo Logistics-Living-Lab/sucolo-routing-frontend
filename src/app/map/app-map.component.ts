@@ -26,7 +26,7 @@ export class AppMapComponent implements OnInit, OnDestroy {
 
   map!: Map
 
-  constructor(protected mapService: AppMapService, protected zone: NgZone, protected oidcSecurityService: OidcSecurityService) {
+  constructor(protected mapService: AppMapService, protected zone: NgZone) {
   }
 
   ngOnInit(): void {

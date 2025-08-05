@@ -20,8 +20,9 @@ fetch('assets/config.json')
       {
         provide: "APP_CONFIG",
         useValue: config,
-      },
-      provideAuth(mergeAuthConfig(config)),
+      }
+      // ,
+      // provideAuth(mergeAuthConfig(config)),
     )
     return bootstrapApplication(AppComponent, appConfig);
   })
@@ -35,6 +36,5 @@ function mergeAuthConfig(config: any): PassedInitialConfig {
     authConfig.config.secureRoutes?.push(config.vroomUrl)
 
   }
-
   return authConfig
 }

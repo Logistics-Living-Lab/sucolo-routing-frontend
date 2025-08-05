@@ -8,7 +8,7 @@ export const routes: Routes = [
   {
     path: "",
     component: MapViewerComponent,
-    canActivate: [autoLoginPartialRoutesGuard]
+    // canActivate: [autoLoginPartialRoutesGuard]
   },
 
   {
@@ -17,8 +17,8 @@ export const routes: Routes = [
     data: {debug: true}
   },
 
-  {
-    path: "callback",
-    component: AuthCallbackComponent,
-  }
+  // {
+  //   path: "callback",
+  //   component: AuthCallbackComponent,
+  // }
 ];
